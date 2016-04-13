@@ -1,4 +1,15 @@
 package abreuvoir
 
 // Client is the NetworkTables Client
-type Client struct{}
+type Client struct {
+	address string
+	port    string
+}
+
+func newClient(connAddr, connPort string) *Client {
+	client = Client{
+		address: connAddr,
+		port:    connPort,
+	}
+	return &client
+}

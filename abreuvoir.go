@@ -1,9 +1,5 @@
 package abreuvoir
 
-import (
-	"fmt"
-)
-
 var (
 	address, port string = "0.0.0.0", "1735"
 	client        Client
@@ -21,5 +17,5 @@ func SetPort(newPort string) {
 
 // InitClient initializes the client and the connection to the remote server.
 func InitClient() {
-	fmt.Println(address, port)
+	client = *newClient(address, port)
 }
