@@ -2,7 +2,9 @@ package util
 
 import (
 	"bytes"
+	"encoding/binary"
 	"io"
+	"math"
 )
 
 const tableSeperator rune = '/'
@@ -47,4 +49,11 @@ func ReadULeb128(reader io.ByteReader) (uint32, uint) {
 		ctr++
 	}
 	return result, ctr
+}
+
+// BytesToFloat64 converts bytes to Float64
+func BytesToFloat64(bytes []byte) float64 {
+	bits := binary.LittleEndian.Uint64(bytes)
+	float := math.Float64frombits(bits)
+	return float
 }

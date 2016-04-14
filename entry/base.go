@@ -38,7 +38,7 @@ type Base struct {
 }
 
 // BuildFromRaw creates a Base using the data passed in.
-func BuildFromRaw(data []byte) *Base {
+func BuildFromRaw(data []byte) Adapter {
 	nameLen, sizeLen := util.ReadULeb128(bytes.NewReader(data))
 	dName := string(data[sizeLen : nameLen-1])
 	dType := data[nameLen]
@@ -46,6 +46,12 @@ func BuildFromRaw(data []byte) *Base {
 	dSeq := [2]byte{data[nameLen+3], data[nameLen+4]}
 	dFlag := data[nameLen+5]
 	dValue := data[nameLen+6:]
+	switch dType {
+	case typeBoolean:
+		return BooleanFromItems(dName, dID, dSeq, dFlag, dValue)
+	case typeDouble:
+		return DoubleFromItems(dName, dID, dSeq, dFlag, dValue)
+	}
 	return &Base{
 		eName:    dName,
 		eNameLen: nameLen,
@@ -55,4 +61,9 @@ func BuildFromRaw(data []byte) *Base {
 		eFlag:    dFlag,
 		eValue:   dValue,
 	}
+}
+
+// GetValue meme
+func (base *Base) GetValue() int {
+	return 0
 }
