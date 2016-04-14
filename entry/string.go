@@ -3,7 +3,7 @@ package entry
 import (
 	"bytes"
 
-	"github.com/HowardStark/Abreuvoir/util"
+	"github.com/HowardStark/abreuvoir/util"
 )
 
 // String Entry
@@ -38,7 +38,7 @@ func StringFromItems(name string, id [2]byte, sequence [2]byte, persist byte, va
 }
 
 // GetValue returns the value of the String
-func (stringEntry *String) GetValue() string {
+func (stringEntry *String) GetValue() interface{} {
 	return stringEntry.trueValue
 }
 

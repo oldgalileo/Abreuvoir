@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 
-	"github.com/HowardStark/Abreuvoir/util"
+	"github.com/HowardStark/abreuvoir/util"
 )
 
 // StringArr Entry
@@ -48,7 +48,7 @@ func StringArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte,
 }
 
 // GetValue returns the value of the StringArr
-func (stringArr *StringArr) GetValue() []string {
+func (stringArr *StringArr) GetValue() interface{} {
 	return StringArr.trueValue
 }
 

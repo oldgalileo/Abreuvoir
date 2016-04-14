@@ -2,11 +2,6 @@ package entry
 
 import "encoding/binary"
 
-const (
-	boolFalse byte = 0x00
-	boolTrue  byte = 0x01
-)
-
 // BooleanArr Entry
 type BooleanArr struct {
 	Base
@@ -48,7 +43,7 @@ func BooleanArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte
 }
 
 // GetValue returns the entire boolean array
-func (booleanArr *BooleanArr) GetValue() []bool {
+func (booleanArr *BooleanArr) GetValue() interface{} {
 	return booleanArr.trueValue
 }
 

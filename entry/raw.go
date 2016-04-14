@@ -30,7 +30,7 @@ func RawFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value
 }
 
 // GetValue returns the raw value of this entry
-func (raw *Raw) GetValue() []byte {
+func (raw *Raw) GetValue() interface{} {
 	return raw.trueValue
 }
 

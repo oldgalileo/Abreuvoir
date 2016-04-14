@@ -5,8 +5,8 @@ type KeepAlive struct {
 	Base
 }
 
-// BuildKeepAlive builds a new KeepAlive message
-func BuildKeepAlive() *KeepAlive {
+// KeepAliveFromItems builds a new KeepAlive message
+func KeepAliveFromItems() *KeepAlive {
 	return &KeepAlive{
 		Base: Base{
 			mType: typeKeepAlive,

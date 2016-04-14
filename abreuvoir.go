@@ -3,6 +3,9 @@ package abreuvoir
 var (
 	address, port string = "0.0.0.0", "1735"
 	client        Client
+
+	// VERSION is the current NetworkTables protocol revision
+	VERSION = [2]byte{0x03, 0x00}
 )
 
 // SetAddress sets the address of the remote server

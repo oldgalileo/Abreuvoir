@@ -19,6 +19,9 @@ const (
 	flagTemporary byte = 0x00
 	flagPersist   byte = 0x01
 	flagReserved  byte = 0xFE
+
+	boolFalse byte = 0x00
+	boolTrue  byte = 0x01
 )
 
 var (
@@ -62,6 +65,7 @@ func BuildFromRaw(data []byte) Adapter {
 	case typeStringArr:
 		return StringArrFromItems(dName, dID, dSeq, dFlag, dValue)
 	}
+	return nil
 }
 
 func (base *Base) clone() *Base {

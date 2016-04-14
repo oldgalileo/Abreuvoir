@@ -1,6 +1,6 @@
 package entry
 
-import "github.com/HowardStark/Abreuvoir/util"
+import "github.com/HowardStark/abreuvoir/util"
 
 // Double Entry
 type Double struct {
@@ -33,7 +33,7 @@ func DoubleFromItems(name string, id [2]byte, sequence [2]byte, persist byte, va
 }
 
 // GetValue returns the value of the Double
-func (double *Double) GetValue() float64 {
+func (double *Double) GetValue() interface{} {
 	return double.trueValue
 }
 

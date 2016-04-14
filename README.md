@@ -1,2 +1,2 @@
-# Abreuvoire
-Abreuvoire  is a Golang implementation of the FRC Network Tables protocol. 
+# Abreuvoir
+Abreuvoir is a Golang implementation of the FRC Network Tables protocol.

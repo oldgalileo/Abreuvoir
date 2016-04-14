@@ -1,10 +1,5 @@
 package entry
 
-const (
-	boolFalse byte = 0x00
-	boolTrue  byte = 0x01
-)
-
 // Boolean Entry
 type Boolean struct {
 	Base
@@ -41,7 +36,7 @@ func BooleanFromItems(name string, id [2]byte, sequence [2]byte, persist byte, v
 }
 
 // GetValue returns the value of the Boolean
-func (boolean *Boolean) GetValue() bool {
+func (boolean *Boolean) GetValue() interface{} {
 	return boolean.trueValue
 }
 

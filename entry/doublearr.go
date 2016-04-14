@@ -3,7 +3,7 @@ package entry
 import (
 	"encoding/binary"
 
-	"github.com/HowardStark/Abreuvoir/util"
+	"github.com/HowardStark/abreuvoir/util"
 )
 
 // DoubleArr Entry
@@ -42,7 +42,7 @@ func DoubleArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte,
 }
 
 // GetValue returns the value of the DoubleArr
-func (doubleArr *DoubleArr) GetValue() []float64 {
+func (doubleArr *DoubleArr) GetValue() interface{} {
 	return DoubleArr.trueValue
 }
 
