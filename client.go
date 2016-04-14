@@ -13,3 +13,8 @@ func newClient(connAddr, connPort string) *Client {
 	}
 	return &client
 }
+
+// GetBoolean fetches a boolean at the specified key
+func (client *Client) GetBoolean(key string) bool {
+	return true
+}
