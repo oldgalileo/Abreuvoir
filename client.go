@@ -4,6 +4,7 @@ package abreuvoir
 type Client struct {
 	address string
 	port    string
+	entries map[string]EntryAdapter
 }
 
 func newClient(connAddr, connPort string) *Client {
@@ -16,5 +17,7 @@ func newClient(connAddr, connPort string) *Client {
 
 // GetBoolean fetches a boolean at the specified key
 func (client *Client) GetBoolean(key string) bool {
+	key = sanitizeKey(key)
+	_ = key
 	return true
 }
