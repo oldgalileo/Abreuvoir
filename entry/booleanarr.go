@@ -58,6 +58,15 @@ func (booleanArr *BooleanArr) GetValueAtIndex(index int) bool {
 }
 
 // IsPersistant returns whether or not the entry should persist beyond restarts.
-func (boolean *Boolean) IsPersistant() bool {
-	return boolean.isPersistant
+func (booleanArr *BooleanArr) IsPersistant() bool {
+	return booleanArr.isPersistant
+}
+
+// Clone returns an identical entry
+func (booleanArr *BooleanArr) Clone() *BooleanArr {
+	return &BooleanArr{
+		trueValue:    booleanArr.trueValue,
+		isPersistant: booleanArr.isPersistant,
+		Base:         booleanArr.Base.clone(),
+	}
 }

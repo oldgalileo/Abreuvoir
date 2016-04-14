@@ -35,6 +35,15 @@ func (raw *Raw) GetValue() []byte {
 }
 
 // IsPersistant returns whether or not the entry should persist beyond restarts.
-func (double *Double) IsPersistant() bool {
-	return double.isPersistant
+func (raw *Raw) IsPersistant() bool {
+	return raw.isPersistant
+}
+
+// Clone returns an identical entry
+func (raw *Raw) Clone() *Raw {
+	return &Raw{
+		trueValue:    raw.trueValue,
+		isPersistant: raw.isPersistant,
+		Base:         raw.Base.clone(),
+	}
 }

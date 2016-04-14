@@ -55,3 +55,12 @@ func (doubleArr *DoubleArr) GetValueAtIndex(index int) float64 {
 func (doubleArr *DoubleArr) IsPersistant() bool {
 	return doubleArr.isPersistant
 }
+
+// Clone returns an identical entry
+func (doubleArr *DoubleArr) Clone() *DoubleArr {
+	return &DoubleArr{
+		trueValue:    doubleArr.trueValue,
+		isPersistant: doubleArr.isPersistant,
+		Base:         doubleArr.Base.clone(),
+	}
+}

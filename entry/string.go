@@ -46,3 +46,12 @@ func (stringEntry *String) GetValue() string {
 func (stringEntry *String) IsPersistant() bool {
 	return stringEntry.isPersistant
 }
+
+// Clone returns an identical entry
+func (stringEntry *String) Clone() *String {
+	return &String{
+		trueValue:    stringEntry.trueValue,
+		isPersistant: stringEntry.isPersistant,
+		Base:         stringEntry.Base.clone(),
+	}
+}

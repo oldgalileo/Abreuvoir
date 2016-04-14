@@ -49,3 +49,12 @@ func (boolean *Boolean) GetValue() bool {
 func (boolean *Boolean) IsPersistant() bool {
 	return boolean.isPersistant
 }
+
+// Clone returns an identical entry
+func (boolean *Boolean) Clone() *Boolean {
+	return &Boolean{
+		trueValue:    boolean.trueValue,
+		isPersistant: boolean.isPersistant,
+		Base:         boolean.Base.clone(),
+	}
+}

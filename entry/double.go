@@ -41,3 +41,12 @@ func (double *Double) GetValue() float64 {
 func (double *Double) IsPersistant() bool {
 	return double.isPersistant
 }
+
+// Clone returns an identical entry
+func (double *Double) Clone() *Double {
+	return &DoubleArr{
+		trueValue:    double.trueValue,
+		isPersistant: double.isPersistant,
+		Base:         double.Base.clone(),
+	}
+}

@@ -64,6 +64,18 @@ func BuildFromRaw(data []byte) Adapter {
 	}
 }
 
+func (base *Base) clone() *Base {
+	return &Base{
+		eName:    base.eName,
+		eNameLen: base.eNameLen,
+		eType:    base.eType,
+		eID:      base.eID,
+		eSeq:     base.eSeq,
+		eFlag:    base.eFlag,
+		eValue:   base.eValue,
+	}
+}
+
 // CompressToBytes remakes the original byte array to represent this entry
 func (base *Base) CompressToBytes() []byte {
 	output := []byte{}

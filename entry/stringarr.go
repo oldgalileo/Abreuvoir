@@ -61,3 +61,12 @@ func (stringArr *StringArr) GetValueAtIndex(index int) string {
 func (stringArr *StringArr) IsPersistant() bool {
 	return stringArr.isPersistant
 }
+
+// Clone returns an identical entry
+func (stringArr *StringArr) Clone() *StringArr {
+	return &StringArr{
+		trueValue:    stringArr.trueValue,
+		isPersistant: stringArr.isPersistant,
+		Base:         stringArr.Base.clone(),
+	}
+}
