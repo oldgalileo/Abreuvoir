@@ -1,0 +1,58 @@
+package entry
+
+import (
+	"bytes"
+
+	"github.com/HowardStark/abreuvoir/util"
+)
+
+const (
+	typeBoolean    byte = 0x00
+	typeDouble     byte = 0x01
+	typeString     byte = 0x02
+	typeRaw        byte = 0x03
+	typeBooleanArr byte = 0x10
+	typeDoubleArr  byte = 0x11
+	typeStringArr  byte = 0x12
+	typeRPCDef     byte = 0x20
+
+	flagTemporary byte = 0x00
+	flagPersist   byte = 0x01
+	flagReserved  byte = 0xFE
+)
+
+var (
+	// idSent is the required ID for an entry that is being created/sent from the client
+	idSent = [2]byte{0xFF, 0xFF}
+)
+
+// Base is the base struct for entries.
+type Base struct {
+	eName    string
+	eNameLen uint32
+	eType    byte
+	eID      [2]byte
+	eSeq     [2]byte
+	eFlag    byte
+	eValue   []byte
+}
+
+// BuildFromRaw creates a Base using the data passed in.
+func BuildFromRaw(data []byte) *Base {
+	nameLen, sizeLen := util.ReadULeb128(bytes.NewReader(data))
+	dName := string(data[sizeLen : nameLen-1])
+	dType := data[nameLen]
+	dID := [2]byte{data[nameLen+1], data[nameLen+2]}
+	dSeq := [2]byte{data[nameLen+3], data[nameLen+4]}
+	dFlag := data[nameLen+5]
+	dValue := data[nameLen+6:]
+	return &Base{
+		eName:    dName,
+		eNameLen: nameLen,
+		eType:    dType,
+		eID:      dID,
+		eSeq:     dSeq,
+		eFlag:    dFlag,
+		eValue:   dValue,
+	}
+}
