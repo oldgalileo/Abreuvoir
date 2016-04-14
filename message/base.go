@@ -21,3 +21,11 @@ type Base struct {
 	mType byte
 	mData []byte
 }
+
+// CompressToBytes remakes the original byte array to represent this entry
+func (base *Base) CompressToBytes() []byte {
+	output := []byte{}
+	output = append(output, base.mType)
+	output = append(output, base.mData...)
+	return output
+}
