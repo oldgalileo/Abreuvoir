@@ -63,3 +63,16 @@ func BuildFromRaw(data []byte) Adapter {
 		return StringArrFromItems(dName, dID, dSeq, dFlag, dValue)
 	}
 }
+
+// CompressToBytes remakes the original byte array to represent this entry
+func (base *Base) CompressToBytes() []byte {
+	output := []byte{}
+	nameBytes := []byte(base.eName)
+	output = append(output, nameBytes...)
+	output = append(output, base.eType)
+	output = append(output, base.eID...)
+	output = append(output, base.eSeq...)
+	output = append(output, base.eFlag)
+	output = append(output, base.eValue...)
+	return output
+}
