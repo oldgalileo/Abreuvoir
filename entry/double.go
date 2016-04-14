@@ -5,11 +5,11 @@ import "github.com/HowardStark/Abreuvoir/util"
 // Double Entry
 type Double struct {
 	Base
-	trueValue    bool
+	trueValue    float64
 	isPersistant bool
 }
 
-// DoubleFromItems builds a boolean entry using the provided parameters
+// DoubleFromItems builds a double entry using the provided parameters
 func DoubleFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *Double {
 	val := util.BytesToFloat64(value)
 	var persistant bool
@@ -32,7 +32,7 @@ func DoubleFromItems(name string, id [2]byte, sequence [2]byte, persist byte, va
 	}
 }
 
-// GetValue returns the value of the Boolean
+// GetValue returns the value of the Double
 func (double *Double) GetValue() float64 {
 	return double.trueValue
 }
