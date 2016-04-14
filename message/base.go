@@ -1,4 +1,4 @@
-package abreuvoir
+package message
 
 const (
 	typeKeepAlive           byte = 0x00
@@ -16,8 +16,8 @@ const (
 	typeRPCResponse         byte = 0x21
 )
 
-// Message is the base struct for Messages
-type Message struct {
+// Base is the base struct for Messages
+type Base struct {
 	mType byte
 	mData []byte
 }

@@ -1,10 +1,15 @@
 package abreuvoir
 
+import (
+	"github.com/HowardStark/abreuvoir/entry"
+	"github.com/HowardStark/abreuvoir/util"
+)
+
 // Client is the NetworkTables Client
 type Client struct {
 	address string
 	port    string
-	entries map[string]EntryAdapter
+	entries map[string]entry.Adapter
 }
 
 func newClient(connAddr, connPort string) *Client {
@@ -17,7 +22,7 @@ func newClient(connAddr, connPort string) *Client {
 
 // GetBoolean fetches a boolean at the specified key
 func (client *Client) GetBoolean(key string) bool {
-	key = sanitizeKey(key)
+	key = util.SanitizeKey(key)
 	_ = key
 	return true
 }

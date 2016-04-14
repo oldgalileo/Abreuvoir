@@ -1,8 +1,9 @@
-package abreuvoir
+package util
 
 const tableSeperator rune = '/'
 
-func sanitizeKey(key string) string {
+// SanitizeKey ensures that the key does not have any trailing '/'s and starts with a '/'
+func SanitizeKey(key string) string {
 	sanitized := []rune(key)
 	if sanitized[0] != tableSeperator {
 		sanitized = append([]rune{tableSeperator}, sanitized...)
