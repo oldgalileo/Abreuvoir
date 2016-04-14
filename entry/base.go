@@ -51,19 +51,9 @@ func BuildFromRaw(data []byte) Adapter {
 		return BooleanFromItems(dName, dID, dSeq, dFlag, dValue)
 	case typeDouble:
 		return DoubleFromItems(dName, dID, dSeq, dFlag, dValue)
+	case typeString:
+		return StringFromItems(dName, dID, dSeq, dFlag, dValue)
+	case typeRaw:
+		return RawFromItems(dName, dID, dSeq, dFlag, dValue)
 	}
-	return &Base{
-		eName:    dName,
-		eNameLen: nameLen,
-		eType:    dType,
-		eID:      dID,
-		eSeq:     dSeq,
-		eFlag:    dFlag,
-		eValue:   dValue,
-	}
-}
-
-// GetValue meme
-func (base *Base) GetValue() int {
-	return 0
 }
