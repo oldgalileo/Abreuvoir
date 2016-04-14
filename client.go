@@ -13,11 +13,10 @@ type Client struct {
 }
 
 func newClient(connAddr, connPort string) *Client {
-	client = Client{
+	return &Client{
 		address: connAddr,
 		port:    connPort,
 	}
-	return &client
 }
 
 // GetBoolean fetches a boolean at the specified key
