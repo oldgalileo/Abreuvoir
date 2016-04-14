@@ -36,3 +36,8 @@ func DoubleFromItems(name string, id [2]byte, sequence [2]byte, persist byte, va
 func (double *Double) GetValue() float64 {
 	return double.trueValue
 }
+
+// IsPersistant returns whether or not the entry should persist beyond restarts.
+func (double *Double) IsPersistant() bool {
+	return double.isPersistant
+}

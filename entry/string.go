@@ -40,3 +40,8 @@ func StringFromItems(name string, id [2]byte, sequence [2]byte, persist byte, va
 func (stringEntry *String) GetValue() string {
 	return stringEntry.trueValue
 }
+
+// IsPersistant returns whether or not the entry should persist beyond restarts.
+func (stringEntry *String) IsPersistant() bool {
+	return stringEntry.isPersistant
+}

@@ -44,3 +44,8 @@ func BooleanFromItems(name string, id [2]byte, sequence [2]byte, persist byte, v
 func (boolean *Boolean) GetValue() bool {
 	return boolean.trueValue
 }
+
+// IsPersistant returns whether or not the entry should persist beyond restarts.
+func (boolean *Boolean) IsPersistant() bool {
+	return boolean.isPersistant
+}
