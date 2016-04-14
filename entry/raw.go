@@ -44,6 +44,6 @@ func (raw *Raw) Clone() *Raw {
 	return &Raw{
 		trueValue:    raw.trueValue,
 		isPersistant: raw.isPersistant,
-		Base:         raw.Base.clone(),
+		Base:         *raw.Base.clone(),
 	}
 }

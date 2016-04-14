@@ -18,12 +18,13 @@ type StringArr struct {
 func StringArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *StringArr {
 	valSize := binary.BigEndian.Uint64(value[0:1])
 	var val []string
-	previousPos := 1
-	for counter := 0; counter < valSize; counter++ {
+	var previousPos uint32 = 1
+	var counter uint64
+	for counter = 0; counter < valSize; counter++ {
 		strPos, sizePos := util.ReadULeb128(bytes.NewReader(value[previousPos:]))
 		strPos += previousPos
 		sizePos += previousPos
-		tempVal := string(data[sizePos : strPos-1])
+		tempVal := string(value[sizePos : strPos-1])
 		val = append(val, tempVal)
 		previousPos = strPos - 1
 	}
@@ -49,7 +50,7 @@ func StringArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte,
 
 // GetValue returns the value of the StringArr
 func (stringArr *StringArr) GetValue() interface{} {
-	return StringArr.trueValue
+	return stringArr.trueValue
 }
 
 // GetValueAtIndex returns the value at the specified index
@@ -67,6 +68,6 @@ func (stringArr *StringArr) Clone() *StringArr {
 	return &StringArr{
 		trueValue:    stringArr.trueValue,
 		isPersistant: stringArr.isPersistant,
-		Base:         stringArr.Base.clone(),
+		Base:         *stringArr.Base.clone(),
 	}
 }

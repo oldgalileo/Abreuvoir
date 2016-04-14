@@ -50,6 +50,6 @@ func (boolean *Boolean) Clone() *Boolean {
 	return &Boolean{
 		trueValue:    boolean.trueValue,
 		isPersistant: boolean.isPersistant,
-		Base:         boolean.Base.clone(),
+		Base:         *boolean.Base.clone(),
 	}
 }

@@ -44,9 +44,9 @@ func (double *Double) IsPersistant() bool {
 
 // Clone returns an identical entry
 func (double *Double) Clone() *Double {
-	return &DoubleArr{
+	return &Double{
 		trueValue:    double.trueValue,
 		isPersistant: double.isPersistant,
-		Base:         double.Base.clone(),
+		Base:         *double.Base.clone(),
 	}
 }

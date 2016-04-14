@@ -86,8 +86,8 @@ func (base *Base) CompressToBytes() []byte {
 	nameBytes := []byte(base.eName)
 	output = append(output, nameBytes...)
 	output = append(output, base.eType)
-	output = append(output, base.eID...)
-	output = append(output, base.eSeq...)
+	output = append(output, base.eID[:]...)
+	output = append(output, base.eSeq[:]...)
 	output = append(output, base.eFlag)
 	output = append(output, base.eValue...)
 	return output

@@ -14,9 +14,9 @@ type String struct {
 }
 
 // StringFromItems builds a string entry using the provided parameters
-func StringFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *Double {
-	nameLen, sizeLen := util.ReadULeb128(bytes.NewReader(data))
-	val := string(data[sizeLen : nameLen-1])
+func StringFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *String {
+	nameLen, sizeLen := util.ReadULeb128(bytes.NewReader(value))
+	val := string(value[sizeLen : nameLen-1])
 	var persistant bool
 	if persist == flagPersist {
 		persistant = true
@@ -52,6 +52,6 @@ func (stringEntry *String) Clone() *String {
 	return &String{
 		trueValue:    stringEntry.trueValue,
 		isPersistant: stringEntry.isPersistant,
-		Base:         stringEntry.Base.clone(),
+		Base:         *stringEntry.Base.clone(),
 	}
 }

@@ -35,9 +35,9 @@ func EncodeULeb128(value uint32) []byte {
 }
 
 // ReadULeb128 reads and decodes an unsigned LEB128 value from a ByteReader to an unsigned int32 value. Returns the result as a uint32
-func ReadULeb128(reader io.ByteReader) (uint32, uint) {
+func ReadULeb128(reader io.ByteReader) (uint32, uint32) {
 	var result uint32
-	var ctr uint
+	var ctr uint32
 	var cur byte = 0x80
 	var err error
 	for (cur&0x80 == 0x80) && ctr < 5 {

@@ -13,7 +13,8 @@ type BooleanArr struct {
 func BooleanArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *BooleanArr {
 	valSize := binary.BigEndian.Uint64(value[0:1])
 	var val []bool
-	for counter := 1; counter-1 < valSize; counter++ {
+	var counter uint64
+	for counter = 1; counter-1 < valSize; counter++ {
 		var tempVal bool
 		if value[counter] == boolTrue {
 			tempVal = true
@@ -49,7 +50,7 @@ func (booleanArr *BooleanArr) GetValue() interface{} {
 
 // GetValueAtIndex returns the value at the specified index
 func (booleanArr *BooleanArr) GetValueAtIndex(index int) bool {
-	return booleaArr.trueValue[index]
+	return booleanArr.trueValue[index]
 }
 
 // IsPersistant returns whether or not the entry should persist beyond restarts.
@@ -62,6 +63,6 @@ func (booleanArr *BooleanArr) Clone() *BooleanArr {
 	return &BooleanArr{
 		trueValue:    booleanArr.trueValue,
 		isPersistant: booleanArr.isPersistant,
-		Base:         booleanArr.Base.clone(),
+		Base:         *booleanArr.Base.clone(),
 	}
 }
