@@ -15,7 +15,8 @@ type String struct {
 
 // StringFromItems builds a string entry using the provided parameters
 func StringFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *Double {
-	val, _ := util.ReadULeb128(bytes.NewReader(value))
+	nameLen, sizeLen := util.ReadULeb128(bytes.NewReader(data))
+	val := string(data[sizeLen : nameLen-1])
 	var persistant bool
 	if persist == flagPersist {
 		persistant = true

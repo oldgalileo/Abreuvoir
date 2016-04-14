@@ -16,7 +16,7 @@ type BooleanArr struct {
 
 // BooleanArrFromItems builds a boolean array entry using the provided parameters
 func BooleanArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *BooleanArr {
-	valSize := binary.BigEndian.Uint64(mySlice[0:1])
+	valSize := binary.BigEndian.Uint64(value[0:1])
 	var val []bool
 	for counter := 1; counter-1 < valSize; counter++ {
 		var tempVal bool

@@ -15,7 +15,7 @@ type DoubleArr struct {
 
 // DoubleArrFromItems builds a DoubleArr entry using the provided parameters
 func DoubleArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *DoubleArr {
-	valSize := binary.BigEndian.Uint64(mySlice[0:1])
+	valSize := binary.BigEndian.Uint64(value[0:1])
 	var val []float64
 	for counter := 1; (counter-1)/8 < valSize; counter += 8 {
 		tempVal := util.BytesToFloat64(value[counter : counter+8])
@@ -42,7 +42,7 @@ func DoubleArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte,
 }
 
 // GetValue returns the value of the DoubleArr
-func (doubleArr *DoubleArr) GetValue() float64 {
+func (doubleArr *DoubleArr) GetValue() []float64 {
 	return DoubleArr.trueValue
 }
 
