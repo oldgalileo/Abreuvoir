@@ -55,5 +55,11 @@ func BuildFromRaw(data []byte) Adapter {
 		return StringFromItems(dName, dID, dSeq, dFlag, dValue)
 	case typeRaw:
 		return RawFromItems(dName, dID, dSeq, dFlag, dValue)
+	case typeBooleanArr:
+		return BooleanArrFromItems(dName, dID, dSeq, dFlag, dValue)
+	case typeDoubleArr:
+		return DoubleArrFromItems(dName, dID, dSeq, dFlag, dValue)
+	case typeStringArr:
+		return StringArrFromItems(dName, dID, dSeq, dFlag, dValue)
 	}
 }
