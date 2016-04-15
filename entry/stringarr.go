@@ -28,12 +28,7 @@ func StringArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte,
 		val = append(val, tempVal)
 		previousPos = strPos - 1
 	}
-	var persistant bool
-	if persist == flagPersist {
-		persistant = true
-	} else {
-		persistant = false
-	}
+	persistant := (persist == flagPersist)
 	return &StringArr{
 		trueValue:    val,
 		isPersistant: persistant,

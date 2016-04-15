@@ -7,18 +7,16 @@ type ProtoUnsupported struct {
 }
 
 // ProtoUnsupportedFromItems builds a new ProtoUnsupported message
-func ProtoUnsupportedFromItems(data []byte) *ProtoUnsupported{
-    var serverVersion [2]byte
-    copy(serverVersion, data[:2])
-    return &ProtoUnsupported{
-        supportedProto: serverVersion,
-        Base: Base{
-            mType: typeProtoUnsupported,
-            mData: data[:2],
-        }
-    }
+func ProtoUnsupportedFromItems(data [2]byte) *ProtoUnsupported {
+	return &ProtoUnsupported{
+		supportedProto: data,
+		Base: Base{
+			mType: typeProtoUnsupported,
+			mData: data,
+		},
+	}
 }
 
 func (protoUnsupported *ProtoUnsupported) GetValue() [2]byte {
-    return protoUnsupported.supportedProto
+	return protoUnsupported.supportedProto
 }
