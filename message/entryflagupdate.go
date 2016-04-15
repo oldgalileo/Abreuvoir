@@ -8,7 +8,7 @@ type EntryFlagUpdate struct {
 	flagUpdate entry.FlagUpdate
 }
 
-// EntryFlagUpdateFromBytes builds an EntryUpdateFlag message from an entry
+// EntryFlagUpdateFromBytes builds an EntryFlagUpdate message using the provided parameters
 func EntryFlagUpdateFromItems(entryId [2]byte, entryFlag byte) *EntryFlagUpdate {
 	tempFlagUpdate := entry.FlagUpdateFromItems(entryId, entryFlag)
     return &EntryFlagUpdate{
@@ -20,7 +20,7 @@ func EntryFlagUpdateFromItems(entryId [2]byte, entryFlag byte) *EntryFlagUpdate 
     }
 }
 
-// GetUpdate returns the Update associated with this EntryUpdate
-func (entryUpdate *EntryFlagUpdate) GetUpdate() *entry.FlagUpdate {
+// GetFlagUpdate returns the Update associated with this EntryFlagUpdate
+func (entryUpdate *EntryFlagUpdate) GetFlagUpdate() *entry.FlagUpdate {
     return entryUpdate.flagUpdate
 }
