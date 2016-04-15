@@ -23,12 +23,7 @@ func BooleanArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte
 		}
 		val = append(val, tempVal)
 	}
-	var persistant bool
-	if persist == flagPersist {
-		persistant = true
-	} else {
-		persistant = false
-	}
+	persistant := (persist == flagPersist)
 	return &BooleanArr{
 		trueValue:    val,
 		isPersistant: persistant,

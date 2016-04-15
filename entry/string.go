@@ -17,12 +17,7 @@ type String struct {
 func StringFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *String {
 	nameLen, sizeLen := util.ReadULeb128(bytes.NewReader(value))
 	val := string(value[sizeLen : nameLen-1])
-	var persistant bool
-	if persist == flagPersist {
-		persistant = true
-	} else {
-		persistant = false
-	}
+	persistant := (persist == flagPersist)
 	return &String{
 		trueValue:    val,
 		isPersistant: persistant,

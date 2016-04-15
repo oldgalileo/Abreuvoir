@@ -9,12 +9,7 @@ type Raw struct {
 
 // RawFromItems builds a raw entry using the provided parameters
 func RawFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *Raw {
-	var persistant bool
-	if persist == flagPersist {
-		persistant = true
-	} else {
-		persistant = false
-	}
+	persistant := (persist == flagPersist)
 	return &Raw{
 		trueValue:    value,
 		isPersistant: persistant,

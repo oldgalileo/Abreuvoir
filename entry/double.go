@@ -12,12 +12,7 @@ type Double struct {
 // DoubleFromItems builds a double entry using the provided parameters
 func DoubleFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *Double {
 	val := util.BytesToFloat64(value[0:8])
-	var persistant bool
-	if persist == flagPersist {
-		persistant = true
-	} else {
-		persistant = false
-	}
+	persistant := (persist == flagPersist)
 	return &Double{
 		trueValue:    val,
 		isPersistant: persistant,

@@ -15,12 +15,7 @@ func BooleanFromItems(name string, id [2]byte, sequence [2]byte, persist byte, v
 	} else {
 		val = false
 	}
-	var persistant bool
-	if persist == flagPersist {
-		persistant = true
-	} else {
-		persistant = false
-	}
+	persistant := (persist == flagPersist)
 	return &Boolean{
 		trueValue:    val,
 		isPersistant: persistant,

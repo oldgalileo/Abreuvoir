@@ -22,12 +22,7 @@ func DoubleArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte,
 		tempVal := util.BytesToFloat64(value[counter : counter+8])
 		val = append(val, tempVal)
 	}
-	var persistant bool
-	if persist == flagPersist {
-		persistant = true
-	} else {
-		persistant = false
-	}
+	persistant := (persist == flagPersist)
 	return &DoubleArr{
 		trueValue:    val,
 		isPersistant: persistant,
