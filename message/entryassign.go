@@ -8,6 +8,7 @@ type EntryAssign struct {
 	entry entry.Adapter
 }
 
+// EntryAssignFromBytes builds an EntryAssign message from an entry
 func EntryAssignFromEntry(newEntry entry.Adapter) *EntryAssign {
 	return &EntryAssign{
 		entry: newEntry,
@@ -18,6 +19,7 @@ func EntryAssignFromEntry(newEntry entry.Adapter) *EntryAssign {
 	}
 }
 
+// EntryAssignFromBytes builds an EntryAssign message and its entry from a byte slice
 func EntryAssignFromBytes(data []byte) (*EntryAssign, error) {
 	tempEntry, err := entry.BuildFromBytes(data)
 	if err != nil {
@@ -30,4 +32,9 @@ func EntryAssignFromBytes(data []byte) (*EntryAssign, error) {
 			mData: data,
 		},
 	}, nil
+}
+
+// GetEntry returns the
+func (entryAssign *EntryAssign) GetEntry() *Adapter {
+	return entryAssign.entry
 }

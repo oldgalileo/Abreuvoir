@@ -25,7 +25,7 @@ type Base struct {
 	mData []byte
 }
 
-// CompressToBytes remakes the original byte array to represent this entry
+// CompressToBytes remakes the original byte slice to represent this entry
 func (base *Base) CompressToBytes() []byte {
 	output := []byte{}
 	output = append(output, base.mType)

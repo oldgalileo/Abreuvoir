@@ -67,7 +67,7 @@ func (stringArr *StringArr) Clone() *StringArr {
 	}
 }
 
-// CompressToBytes returns a byte array representing the StringArr entry
+// CompressToBytes returns a byte slice representing the StringArr entry
 func (stringArr *StringArr) CompressToBytes() []byte {
 	return stringArr.Base.CompressToBytes()
 }

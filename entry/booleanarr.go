@@ -9,7 +9,7 @@ type BooleanArr struct {
 	isPersistant bool
 }
 
-// BooleanArrFromItems builds a boolean array entry using the provided parameters
+// BooleanArrFromItems builds a BooleanArr entry using the provided parameters
 func BooleanArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *BooleanArr {
 	valSize := binary.BigEndian.Uint64(value[0:1])
 	var val []bool
@@ -33,7 +33,7 @@ func BooleanArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte
 	}
 }
 
-// GetValue returns the entire boolean array
+// GetValue returns the trueValue
 func (booleanArr *BooleanArr) GetValue() interface{} {
 	return booleanArr.trueValue
 }
@@ -57,7 +57,7 @@ func (booleanArr *BooleanArr) Clone() *BooleanArr {
 	}
 }
 
-// CompressToBytes returns a byte array representing the BooleanArr entry
+// CompressToBytes returns a byte slice representing the BooleanArr entry
 func (booleanArr *BooleanArr) CompressToBytes() []byte {
 	return booleanArr.Base.CompressToBytes()
 }

@@ -65,8 +65,9 @@ func BuildFromBytes(data []byte) (Adapter, error) {
 		return DoubleArrFromItems(dName, dID, dSeq, dFlag, dValue), nil
 	case typeStringArr:
 		return StringArrFromItems(dName, dID, dSeq, dFlag, dValue), nil
+	default:
+		return nil, errors.New("entry: Unknown entry type")
 	}
-	return nil, errors.New("entry: Unknown entry type")
 }
 
 func (base *Base) clone() *Base {
@@ -81,7 +82,7 @@ func (base *Base) clone() *Base {
 	}
 }
 
-// CompressToBytes remakes the original byte array to represent this entry
+// CompressToBytes remakes the original byte slice to represent this entry
 func (base *Base) CompressToBytes() []byte {
 	output := []byte{}
 	nameBytes := []byte(base.eName)
