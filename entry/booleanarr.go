@@ -15,12 +15,7 @@ func BooleanArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte
 	var val []bool
 	var counter uint64
 	for counter = 1; counter-1 < valSize; counter++ {
-		var tempVal bool
-		if value[counter] == boolTrue {
-			tempVal = true
-		} else {
-			tempVal = false
-		}
+		tempVal := (value[counter] == boolTrue)
 		val = append(val, tempVal)
 	}
 	persistant := (persist == flagPersist)

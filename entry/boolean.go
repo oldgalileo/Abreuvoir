@@ -9,12 +9,7 @@ type Boolean struct {
 
 // BooleanFromItems builds a boolean entry using the provided parameters
 func BooleanFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *Boolean {
-	var val bool
-	if value[0] == boolTrue {
-		val = true
-	} else {
-		val = false
-	}
+	val := (value[0] == boolTrue)
 	persistant := (persist == flagPersist)
 	return &Boolean{
 		trueValue:    val,
