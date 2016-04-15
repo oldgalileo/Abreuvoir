@@ -26,3 +26,11 @@ func ServerHelloFromItems(flags byte, identity []byte) *ServerHello {
         }
     }
 }
+
+func (serverHello *ServerHello) IsFirstConnection() bool {
+    return serverHello.firstConnection
+}
+
+func (serverHello *ServerHell) GetServerIdentity() string {
+    return serverHello.serverIdentity
+}
