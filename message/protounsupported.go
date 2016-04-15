@@ -17,6 +17,7 @@ func ProtoUnsupportedFromItems(data [2]byte) *ProtoUnsupported {
 	}
 }
 
-func (protoUnsupported *ProtoUnsupported) GetValue() [2]byte {
+// GetSupportedProto returns the NetworkTables protocol revision that the server supports
+func (protoUnsupported *ProtoUnsupported) GetSupportedProto() [2]byte {
 	return protoUnsupported.supportedProto
 }

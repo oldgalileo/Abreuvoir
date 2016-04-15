@@ -5,7 +5,7 @@ type ServerHelloComplete struct {
 	Base
 }
 
-// ServerHelloCompleteFromItems builds a new ServerHelloComplete message
+// ServerHelloCompleteFromItems builds a new ServerHelloComplete message using the provided parameters
 func ServerHelloCompleteFromItems() *ServerHelloComplete {
 	return &ServerHelloComplete{
 		Base: Base{
