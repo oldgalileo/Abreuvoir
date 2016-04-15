@@ -8,6 +8,7 @@ type EntryFlagUpdate struct {
 	flagUpdate entry.FlagUpdate
 }
 
+// EntryFlagUpdateFromFlagUpdate builds an EntryFlagUpdate message from a FlagUpdate
 func EntryFlagUpdateFromFlagUpdate(flagUpdateData entry.FlagUpdate) *EntryFlagUpdate {
 	return &EntryFlagUpdate{
 		update: flagUpdateData,
