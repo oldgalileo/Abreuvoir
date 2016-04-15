@@ -2,6 +2,7 @@ package entry
 
 import (
 	"bytes"
+	"errors"
 
 	"github.com/HowardStark/abreuvoir/util"
 )
@@ -40,8 +41,8 @@ type Base struct {
 	eValue   []byte
 }
 
-// BuildFromRaw creates a Base using the data passed in.
-func BuildFromRaw(data []byte) Adapter {
+// BuildFromBytes creates a Base using the data passed in.
+func BuildFromBytes(data []byte) (Adapter, error) {
 	nameLen, sizeLen := util.ReadULeb128(bytes.NewReader(data))
 	dName := string(data[sizeLen : nameLen-1])
 	dType := data[nameLen]
@@ -51,21 +52,21 @@ func BuildFromRaw(data []byte) Adapter {
 	dValue := data[nameLen+6:]
 	switch dType {
 	case typeBoolean:
-		return BooleanFromItems(dName, dID, dSeq, dFlag, dValue)
+		return BooleanFromItems(dName, dID, dSeq, dFlag, dValue), nil
 	case typeDouble:
-		return DoubleFromItems(dName, dID, dSeq, dFlag, dValue)
+		return DoubleFromItems(dName, dID, dSeq, dFlag, dValue), nil
 	case typeString:
-		return StringFromItems(dName, dID, dSeq, dFlag, dValue)
+		return StringFromItems(dName, dID, dSeq, dFlag, dValue), nil
 	case typeRaw:
-		return RawFromItems(dName, dID, dSeq, dFlag, dValue)
+		return RawFromItems(dName, dID, dSeq, dFlag, dValue), nil
 	case typeBooleanArr:
-		return BooleanArrFromItems(dName, dID, dSeq, dFlag, dValue)
+		return BooleanArrFromItems(dName, dID, dSeq, dFlag, dValue), nil
 	case typeDoubleArr:
-		return DoubleArrFromItems(dName, dID, dSeq, dFlag, dValue)
+		return DoubleArrFromItems(dName, dID, dSeq, dFlag, dValue), nil
 	case typeStringArr:
-		return StringArrFromItems(dName, dID, dSeq, dFlag, dValue)
+		return StringArrFromItems(dName, dID, dSeq, dFlag, dValue), nil
 	}
-	return nil
+	return nil, errors.New("entry: Unknown entry type")
 }
 
 func (base *Base) clone() *Base {

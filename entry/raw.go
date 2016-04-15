@@ -42,3 +42,8 @@ func (raw *Raw) Clone() *Raw {
 		Base:         *raw.Base.clone(),
 	}
 }
+
+// CompressToBytes returns a byte array representing the Raw entry
+func (raw *Raw) CompressToBytes() []byte {
+	return raw.Base.CompressToBytes()
+}

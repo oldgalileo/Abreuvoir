@@ -43,3 +43,8 @@ func (boolean *Boolean) Clone() *Boolean {
 		Base:         *boolean.Base.clone(),
 	}
 }
+
+// CompressToBytes returns a byte array representing the Boolean entry
+func (boolean *Boolean) CompressToBytes() []byte {
+	return boolean.Base.CompressToBytes()
+}

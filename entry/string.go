@@ -50,3 +50,8 @@ func (stringEntry *String) Clone() *String {
 		Base:         *stringEntry.Base.clone(),
 	}
 }
+
+// CompressToBytes returns a byte array representing the String entry
+func (stringEntry *String) CompressToBytes() []byte {
+	return stringEntry.Base.CompressToBytes()
+}

@@ -60,3 +60,8 @@ func (doubleArr *DoubleArr) Clone() *DoubleArr {
 		Base:         *doubleArr.Base.clone(),
 	}
 }
+
+// CompressToBytes returns a byte array representing the DoubleArr entry
+func (doubleArr *DoubleArr) CompressToBytes() []byte {
+	return doubleArr.Base.CompressToBytes()
+}
