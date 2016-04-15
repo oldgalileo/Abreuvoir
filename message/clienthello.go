@@ -9,23 +9,31 @@ import (
 // ClientHello message
 type ClientHello struct {
 	Base
-	protocolRev [2]byte
-	identity    string
+	protoRev [2]byte
+	identity string
 }
 
 // ClientHelloFromItems builds a new ClientHello message using the provided parameters
-func ClientHelloFromItems(data []byte) *ClientHello {
-	var protoRev [2]byte
-	copy(protoRev[:], data[:2])
-	nameData := data[2:]
+func ClientHelloFromItems(protocolRev [2]byte, nameData []byte) *ClientHello {
 	nameLen, sizeLen := util.ReadULeb128(bytes.NewBuffer(nameData))
 	name := string(nameData[sizeLen:nameLen])
+	totalData := []byte{protocolRev[:2], nameData}
 	return &ClientHello{
-		identity:    name,
-		protocolRev: protoRev,
+		identity: name,
+		proto:    protoRev,
 		Base: Base{
 			mType: typeClientHello,
-			mData: data,
+			mData: totalData,
 		},
 	}
+}
+
+// GetProtoRev returns the client's NetworkTable protocol revision
+func (clientHello *ClientHello) GetProtoRev() [2]byte {
+	return clientHello.protoRev
+}
+
+// GetIdentity returns the client's identity
+func (clientHello *ClientHello) GetIdentity() string {
+	return clientHello.identity
 }

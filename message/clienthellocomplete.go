@@ -1,5 +1,6 @@
 package message
 
+// ClientHelloComplete message
 type ClientHelloComplete struct {
 	Base
 }
