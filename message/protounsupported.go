@@ -1,4 +1,4 @@
-package messages
+package message
 
 // ProtoUnsupported message
 type ProtoUnsupported struct {

@@ -3,7 +3,7 @@ package message
 import (
 	"bytes"
 
-	"github.com/HowardStark/Abreuvoir/util"
+	"github.com/HowardStark/abreuvoir/util"
 )
 
 // ClientHello message

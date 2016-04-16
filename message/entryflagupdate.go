@@ -1,6 +1,6 @@
 package message
 
-import "github.com/HowardStark/Abreuvoir/entry"
+import "github.com/HowardStark/abreuvoir/entry"
 
 // EntryFlagUpdate message
 type EntryFlagUpdate struct {

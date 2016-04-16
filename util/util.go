@@ -57,3 +57,8 @@ func BytesToFloat64(bytes []byte) float64 {
 	float := math.Float64frombits(bits)
 	return float
 }
+
+// ConcatAddress concatonates an address and a port into an authority
+func ConcatAddress(address, port string) string {
+	return address + ":" + port
+}
