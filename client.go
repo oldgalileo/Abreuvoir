@@ -1,6 +1,7 @@
 package abreuvoir
 
 import (
+	"errors"
 	"net"
 
 	"github.com/HowardStark/abreuvoir/entry"
@@ -44,6 +45,7 @@ func newClient(connAddr, connPort string) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return &Client{
 		conn:    tcpConn,
 		entries: map[string]entry.Adapter{},
@@ -55,6 +57,18 @@ func (client *Client) GetBoolean(key string) bool {
 	key = util.SanitizeKey(key)
 	_ = key
 	return true
+}
+
+func (client *Client) startHandshake() {
+
+}
+
+//
+func (client *Client) sendMessage(message message.Adapter) error {
+	if client.status != ClientDisconnected {
+		client.conn.Write(message.CompressToBytes())
+	}
+	return errors.New("client: server could not be reached.")
 }
 
 // keepAlive should be run in a Go routine. It sends a

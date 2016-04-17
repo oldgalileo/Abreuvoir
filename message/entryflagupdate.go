@@ -32,6 +32,11 @@ func EntryFlagUpdateFromItems(entryID [2]byte, entryFlag byte) *EntryFlagUpdate 
 }
 
 // GetFlagUpdate returns the Update associated with this EntryFlagUpdate
-func (entryUpdate *EntryFlagUpdate) GetFlagUpdate() entry.FlagUpdate {
-	return entryUpdate.update
+func (entryFlagUpdate *EntryFlagUpdate) GetFlagUpdate() entry.FlagUpdate {
+	return entryFlagUpdate.update
+}
+
+// CompressToBytes returns the message in its byte array form
+func (entryFlagUpdate *EntryFlagUpdate) CompressToBytes() []byte {
+	return entryFlagUpdate.Base.compressToBytes()
 }

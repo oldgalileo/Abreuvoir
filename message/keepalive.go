@@ -15,3 +15,8 @@ func KeepAliveFromItems() *KeepAlive {
 		},
 	}
 }
+
+// CompressToBytes returns the message in its byte array form
+func (keepAlive *KeepAlive) CompressToBytes() []byte {
+	return keepAlive.Base.compressToBytes()
+}

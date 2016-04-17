@@ -38,3 +38,8 @@ func EntryUpdateFromItems(entryID [2]byte, entrySeq [2]byte, entryType byte, ent
 func (entryUpdate *EntryUpdate) GetUpdate() entry.Update {
 	return entryUpdate.update
 }
+
+// CompressToBytes returns the message in its byte array form
+func (entryUpdate *EntryUpdate) CompressToBytes() []byte {
+	return entryUpdate.Base.compressToBytes()
+}

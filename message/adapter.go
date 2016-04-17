@@ -4,5 +4,5 @@ package message
 type Adapter interface {
 	getType() byte
 	getData() []byte
-	composeMessage() []byte
+	CompressToBytes() []byte
 }

@@ -83,7 +83,7 @@ func (base *Base) clone() *Base {
 }
 
 // CompressToBytes remakes the original byte slice to represent this entry
-func (base *Base) CompressToBytes() []byte {
+func (base *Base) compressToBytes() []byte {
 	output := []byte{}
 	nameBytes := []byte(base.eName)
 	output = append(output, nameBytes...)

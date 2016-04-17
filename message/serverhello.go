@@ -39,3 +39,8 @@ func (serverHello *ServerHello) IsFirstConnection() bool {
 func (serverHello *ServerHello) GetServerIdentity() string {
 	return serverHello.serverIdentity
 }
+
+// CompressToBytes returns the message in its byte array form
+func (serverHello *ServerHello) CompressToBytes() []byte {
+	return serverHello.Base.compressToBytes()
+}

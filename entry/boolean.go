@@ -46,5 +46,5 @@ func (boolean *Boolean) Clone() *Boolean {
 
 // CompressToBytes returns a byte slice representing the Boolean entry
 func (boolean *Boolean) CompressToBytes() []byte {
-	return boolean.Base.CompressToBytes()
+	return boolean.Base.compressToBytes()
 }

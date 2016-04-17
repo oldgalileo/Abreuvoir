@@ -48,5 +48,5 @@ func (double *Double) Clone() *Double {
 
 // CompressToBytes returns a byte slice representing the Double entry
 func (double *Double) CompressToBytes() []byte {
-	return double.Base.CompressToBytes()
+	return double.Base.compressToBytes()
 }

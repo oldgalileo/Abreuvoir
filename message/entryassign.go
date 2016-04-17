@@ -38,3 +38,8 @@ func EntryAssignFromBytes(data []byte) (*EntryAssign, error) {
 func (entryAssign *EntryAssign) GetEntry() entry.Adapter {
 	return entryAssign.entry
 }
+
+// CompressToBytes returns the message in its byte array form
+func (entryAssign *EntryAssign) CompressToBytes() []byte {
+	return entryAssign.Base.compressToBytes()
+}

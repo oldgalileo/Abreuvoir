@@ -59,5 +59,5 @@ func (booleanArr *BooleanArr) Clone() *BooleanArr {
 
 // CompressToBytes returns a byte slice representing the BooleanArr entry
 func (booleanArr *BooleanArr) CompressToBytes() []byte {
-	return booleanArr.Base.CompressToBytes()
+	return booleanArr.Base.compressToBytes()
 }

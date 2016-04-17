@@ -15,3 +15,8 @@ func ServerHelloCompleteFromItems() *ServerHelloComplete {
 		},
 	}
 }
+
+// CompressToBytes returns the message in its byte array form
+func (serverHelloComplete *ServerHelloComplete) CompressToBytes() []byte {
+	return serverHelloComplete.Base.compressToBytes()
+}

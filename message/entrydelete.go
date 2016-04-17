@@ -21,3 +21,8 @@ func EntryDeleteFromItems(dID [2]byte) *EntryDelete {
 func (entryDelete *EntryDelete) GetID() [2]byte {
 	return entryDelete.id
 }
+
+// CompressToBytes returns the message in its byte array form
+func (entryDelete *EntryDelete) CompressToBytes() []byte {
+	return entryDelete.Base.compressToBytes()
+}

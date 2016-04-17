@@ -21,3 +21,8 @@ func ProtoUnsupportedFromItems(data [2]byte) *ProtoUnsupported {
 func (protoUnsupported *ProtoUnsupported) GetSupportedProto() [2]byte {
 	return protoUnsupported.supportedProto
 }
+
+// CompressToBytes returns the message in its byte array form
+func (protoUnsupported *ProtoUnsupported) CompressToBytes() []byte {
+	return protoUnsupported.Base.compressToBytes()
+}

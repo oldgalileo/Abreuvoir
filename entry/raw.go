@@ -45,5 +45,5 @@ func (raw *Raw) Clone() *Raw {
 
 // CompressToBytes returns a byte slice representing the Raw entry
 func (raw *Raw) CompressToBytes() []byte {
-	return raw.Base.CompressToBytes()
+	return raw.Base.compressToBytes()
 }
