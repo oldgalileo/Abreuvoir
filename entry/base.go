@@ -71,15 +71,7 @@ func BuildFromBytes(data []byte) (Adapter, error) {
 }
 
 func (base *Base) clone() *Base {
-	return &Base{
-		eName:    base.eName,
-		eNameLen: base.eNameLen,
-		eType:    base.eType,
-		eID:      base.eID,
-		eSeq:     base.eSeq,
-		eFlag:    base.eFlag,
-		eValue:   base.eValue,
-	}
+	return &*base
 }
 
 // CompressToBytes remakes the original byte slice to represent this entry
