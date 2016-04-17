@@ -8,6 +8,7 @@ type EntryUpdate struct {
 	update entry.Update
 }
 
+// EntryUpdateFromUpdate builds an EntryUpdate message from an update
 func EntryUpdateFromUpdate(entryUpdate entry.Update) *EntryUpdate {
 	return &EntryUpdate{
 		update: entryUpdate,
@@ -18,14 +19,14 @@ func EntryUpdateFromUpdate(entryUpdate entry.Update) *EntryUpdate {
 	}
 }
 
-// EntryUpdateFromBytes builds an EntryUpdate message from an entry
-func EntryUpdateFromItems(entryId [2]byte, entrySeq [2]byte, entryType byte, entryData []byte) (*EntryUpdate, error) {
-	tempUpdate, err := entry.UpdateFromItems(entryId, entrySeq, entryType, entryData)
+// EntryUpdateFromItems builds an EntryUpdate message from the parameters provided
+func EntryUpdateFromItems(entryID [2]byte, entrySeq [2]byte, entryType byte, entryData []byte) (*EntryUpdate, error) {
+	tempUpdate, err := entry.UpdateFromItems(entryID, entrySeq, entryType, entryData)
 	if err != nil {
 		return nil, err
 	}
 	return &EntryUpdate{
-		update: tempUpdate,
+		update: *tempUpdate,
 		Base: Base{
 			mType: typeEntryUpdate,
 			mData: tempUpdate.CompressToBytes(),
@@ -34,6 +35,6 @@ func EntryUpdateFromItems(entryId [2]byte, entrySeq [2]byte, entryType byte, ent
 }
 
 // GetUpdate returns the Update associated with this EntryUpdate
-func (entryUpdate *EntryUpdate) GetUpdate() *entry.Update {
+func (entryUpdate *EntryUpdate) GetUpdate() entry.Update {
 	return entryUpdate.update
 }

@@ -8,13 +8,13 @@ type EntryAssign struct {
 	entry entry.Adapter
 }
 
-// EntryAssignFromBytes builds an EntryAssign message from an entry
+// EntryAssignFromEntry builds an EntryAssign message from an entry
 func EntryAssignFromEntry(newEntry entry.Adapter) *EntryAssign {
 	return &EntryAssign{
 		entry: newEntry,
 		Base: Base{
 			mType: typeEntryAssign,
-			mData: newEntry.CompressToBytes,
+			mData: newEntry.CompressToBytes(),
 		},
 	}
 }
@@ -34,7 +34,7 @@ func EntryAssignFromBytes(data []byte) (*EntryAssign, error) {
 	}, nil
 }
 
-// GetEntry returns the
-func (entryAssign *EntryAssign) GetEntry() *Adapter {
+// GetEntry returns the entry associated with this EntryAssign message
+func (entryAssign *EntryAssign) GetEntry() entry.Adapter {
 	return entryAssign.entry
 }

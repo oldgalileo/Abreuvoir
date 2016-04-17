@@ -15,8 +15,8 @@ const (
 	typeRPCExec             byte = 0x20
 	typeRPCResponse         byte = 0x21
 
-	lsbFirstConnect int = 0
-	lsbReconnect    int = 1
+	lsbFirstConnect byte = 0x00
+	lsbReconnect    byte = 0x01
 )
 
 // Base is the base struct for Messages
@@ -25,8 +25,8 @@ type Base struct {
 	mData []byte
 }
 
-// CompressToBytes remakes the original byte slice to represent this entry
-func (base *Base) CompressToBytes() []byte {
+// compressToBytes remakes the original byte slice to represent this entry
+func (base *Base) compressToBytes() []byte {
 	output := []byte{}
 	output = append(output, base.mType)
 	output = append(output, base.mData...)

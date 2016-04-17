@@ -19,7 +19,7 @@ func ServerHelloFromItems(flags byte, identity []byte) *ServerHello {
 	identityStr := string(identity[identitySizeLen:identityStrLen])
 	flagsLSB := flags & 1
 	firstConn := (flagsLSB == lsbFirstConnect)
-	totalData := append([]byte{flags}, identity)
+	totalData := append([]byte{flags}, identity...)
 	return &ServerHello{
 		firstConnection: firstConn,
 		serverIdentity:  identityStr,
@@ -30,10 +30,12 @@ func ServerHelloFromItems(flags byte, identity []byte) *ServerHello {
 	}
 }
 
+// IsFirstConnection returns if this is the first connection the client has made to the server
 func (serverHello *ServerHello) IsFirstConnection() bool {
 	return serverHello.firstConnection
 }
 
-func (serverHello *ServerHell) GetServerIdentity() string {
+// GetServerIdentity returns the server identity
+func (serverHello *ServerHello) GetServerIdentity() string {
 	return serverHello.serverIdentity
 }

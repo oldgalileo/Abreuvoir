@@ -17,10 +17,12 @@ type ClientHello struct {
 func ClientHelloFromItems(protocolRev [2]byte, nameData []byte) *ClientHello {
 	nameLen, sizeLen := util.ReadULeb128(bytes.NewBuffer(nameData))
 	name := string(nameData[sizeLen:nameLen])
-	totalData := []byte{protocolRev[:2], nameData}
+	totalData := []byte{}
+	totalData = append(totalData, protocolRev[:2]...)
+	totalData = append(totalData, nameData[:]...)
 	return &ClientHello{
 		identity: name,
-		proto:    protoRev,
+		protoRev: protocolRev,
 		Base: Base{
 			mType: typeClientHello,
 			mData: totalData,
@@ -36,4 +38,9 @@ func (clientHello *ClientHello) GetProtoRev() [2]byte {
 // GetIdentity returns the client's identity
 func (clientHello *ClientHello) GetIdentity() string {
 	return clientHello.identity
+}
+
+// CompressToBytes returns the message in its byte array form
+func (clientHello *ClientHello) CompressToBytes() []byte {
+	return clientHello.Base.compressToBytes()
 }

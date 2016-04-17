@@ -12,7 +12,7 @@ func ProtoUnsupportedFromItems(data [2]byte) *ProtoUnsupported {
 		supportedProto: data,
 		Base: Base{
 			mType: typeProtoUnsupported,
-			mData: data,
+			mData: data[:],
 		},
 	}
 }
