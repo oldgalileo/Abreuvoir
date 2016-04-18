@@ -1,5 +1,10 @@
 package message
 
+import (
+	"errors"
+	"io"
+)
+
 const (
 	typeKeepAlive           byte = 0x00
 	typeClientHello         byte = 0x01
@@ -23,6 +28,39 @@ const (
 type Base struct {
 	mType byte
 	mData []byte
+}
+
+// BuildFromReader identifies and builds the message with the same type as the
+// message type passed in
+func BuildFromReader(messageType [1]byte, reader io.Reader) (Adapter, error) {
+	switch messageType[0] {
+	case typeKeepAlive:
+		return KeepAliveFromReader(), nil
+	case typeClientHello:
+		return ClientHelloFromReader(reader)
+	case typeProtoUnsupported:
+		return ProtoUnsupportedFromReader(reader)
+	case typeServerHelloComplete:
+		return ServerHelloCompleteFromReader(), nil
+	case typeServerHello:
+		return ServerHelloFromReader(reader)
+	case typeClientHelloComplete:
+		return ClientHelloCompleteFromReader(), nil
+	case typeEntryAssign:
+		return EntryAssignFromReader(reader)
+	case typeEntryUpdate:
+		return EntryUpdateFromReader(reader)
+	case typeEntryFlagUpdate:
+		return EntryFlagUpdateFromReader(reader)
+	case typeEntryDelete:
+		return EntryDeleteFromReader(reader)
+	case typeClearAllEntries:
+	case typeRPCExec:
+	case typeRPCResponse:
+	default:
+		return nil, errors.New("message: Unknown message type")
+	}
+	return nil, errors.New("message: Unknown message type")
 }
 
 // compressToBytes remakes the original byte slice to represent this entry

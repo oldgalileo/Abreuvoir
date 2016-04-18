@@ -1,9 +1,27 @@
 package message
 
+import "io"
+
 // ProtoUnsupported message
 type ProtoUnsupported struct {
 	supportedProto [2]byte
 	Base
+}
+
+// ProtoUnsupportedFromReader builds a new ProtoUnsupported message
+func ProtoUnsupportedFromReader(reader io.Reader) (*ProtoUnsupported, error) {
+	var supportedVersion [2]byte
+	_, err := io.ReadFull(reader, supportedVersion[:])
+	if err != nil {
+		return nil, err
+	}
+	return &ProtoUnsupported{
+		supportedProto: supportedVersion,
+		Base: Base{
+			mType: typeProtoUnsupported,
+			mData: supportedVersion[:],
+		},
+	}, nil
 }
 
 // ProtoUnsupportedFromItems builds a new ProtoUnsupported message

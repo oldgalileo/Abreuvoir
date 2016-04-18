@@ -2,6 +2,7 @@ package message
 
 import (
 	"bytes"
+	"io"
 
 	"github.com/HowardStark/abreuvoir/util"
 )
@@ -13,12 +14,40 @@ type ServerHello struct {
 	serverIdentity  string
 }
 
+// ServerHelloFromReader builds a new ServerHello message using the provided reader
+func ServerHelloFromReader(reader io.Reader) (*ServerHello, error) {
+	var flags [1]byte
+	_, flagErr := io.ReadFull(reader, flags[:])
+	if flagErr != nil {
+		return nil, flagErr
+	}
+	firstConn := ((flags[0] & 1) == lsbFirstConnect)
+	identityLength, identitySizeData := util.PeekULeb128(reader)
+	identityData := make([]byte, identityLength)
+	_, identityErr := io.ReadFull(reader, identityData[:])
+	if identityErr != nil {
+		return nil, identityErr
+	}
+	identity := string(identityData[:])
+	var totalData []byte
+	totalData = append(totalData, flags[:]...)
+	totalData = append(totalData, identitySizeData...)
+	totalData = append(totalData, identityData[:]...)
+	return &ServerHello{
+		firstConnection: firstConn,
+		serverIdentity:  identity,
+		Base: Base{
+			mType: typeServerHello,
+			mData: totalData,
+		},
+	}, nil
+}
+
 // ServerHelloFromItems builds a new ServerHello message using the provided parameters
 func ServerHelloFromItems(flags byte, identity []byte) *ServerHello {
 	identityStrLen, identitySizeLen := util.ReadULeb128(bytes.NewBuffer(identity))
 	identityStr := string(identity[identitySizeLen:identityStrLen])
-	flagsLSB := flags & 1
-	firstConn := (flagsLSB == lsbFirstConnect)
+	firstConn := ((flags & 1) == lsbFirstConnect)
 	totalData := append([]byte{flags}, identity...)
 	return &ServerHello{
 		firstConnection: firstConn,

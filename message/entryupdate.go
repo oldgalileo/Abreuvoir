@@ -1,32 +1,25 @@
 package message
 
-import "github.com/HowardStark/abreuvoir/entry"
+import (
+	"io"
+
+	"github.com/HowardStark/abreuvoir/entryupdate"
+)
 
 // EntryUpdate message
 type EntryUpdate struct {
 	Base
-	update entry.Update
+	Update entryupdate.Adapter
 }
 
-// EntryUpdateFromUpdate builds an EntryUpdate message from an update
-func EntryUpdateFromUpdate(entryUpdate entry.Update) *EntryUpdate {
-	return &EntryUpdate{
-		update: entryUpdate,
-		Base: Base{
-			mType: typeEntryUpdate,
-			mData: entryUpdate.CompressToBytes(),
-		},
-	}
-}
-
-// EntryUpdateFromItems builds an EntryUpdate message from the parameters provided
-func EntryUpdateFromItems(entryID [2]byte, entrySeq [2]byte, entryType byte, entryData []byte) (*EntryUpdate, error) {
-	tempUpdate, err := entry.UpdateFromItems(entryID, entrySeq, entryType, entryData)
+// EntryUpdateFromReader meme
+func EntryUpdateFromReader(reader io.Reader) (*EntryUpdate, error) {
+	tempUpdate, err := entryupdate.BuildFromReader(reader)
 	if err != nil {
 		return nil, err
 	}
 	return &EntryUpdate{
-		update: *tempUpdate,
+		Update: tempUpdate,
 		Base: Base{
 			mType: typeEntryUpdate,
 			mData: tempUpdate.CompressToBytes(),
@@ -34,9 +27,20 @@ func EntryUpdateFromItems(entryID [2]byte, entrySeq [2]byte, entryType byte, ent
 	}, nil
 }
 
+// EntryUpdateFromUpdate builds an EntryUpdate message from an update
+func EntryUpdateFromUpdate(entryUpdate entryupdate.Adapter) *EntryUpdate {
+	return &EntryUpdate{
+		Update: entryUpdate,
+		Base: Base{
+			mType: typeEntryUpdate,
+			mData: entryUpdate.CompressToBytes(),
+		},
+	}
+}
+
 // GetUpdate returns the Update associated with this EntryUpdate
-func (entryUpdate *EntryUpdate) GetUpdate() entry.Update {
-	return entryUpdate.update
+func (entryUpdate *EntryUpdate) GetUpdate() entryupdate.Adapter {
+	return entryUpdate.Update
 }
 
 // CompressToBytes returns the message in its byte array form

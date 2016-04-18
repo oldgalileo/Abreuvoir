@@ -3,6 +3,7 @@ package entry
 import (
 	"bytes"
 	"errors"
+	"io"
 
 	"github.com/HowardStark/abreuvoir/util"
 )
@@ -32,16 +33,65 @@ var (
 
 // Base is the base struct for entries.
 type Base struct {
-	eName    string
-	eNameLen uint32
-	eType    byte
-	eID      [2]byte
-	eSeq     [2]byte
-	eFlag    byte
-	eValue   []byte
+	eName  string
+	eType  byte
+	eID    [2]byte
+	eSeq   [2]byte
+	eFlag  byte
+	eValue []byte
 }
 
-// BuildFromBytes creates a Base using the data passed in.
+// BuildFromReader creates an entry using the reader passed in
+func BuildFromReader(reader io.Reader) (Adapter, error) {
+	nameLen, _ := util.ReadULeb128(reader)
+	nameData := make([]byte, nameLen)
+	_, nameErr := io.ReadFull(reader, nameData[:])
+	if nameErr != nil {
+		return nil, nameErr
+	}
+	name := string(nameData[:])
+	var typeData [1]byte
+	_, typeErr := io.ReadFull(reader, typeData[:])
+	if typeErr != nil {
+		return nil, typeErr
+	}
+	var idData [2]byte
+	_, idErr := io.ReadFull(reader, idData[:])
+	if idErr != nil {
+		return nil, idErr
+	}
+	var seqData [2]byte
+	_, seqErr := io.ReadFull(reader, seqData[:])
+	if seqErr != nil {
+		return nil, seqErr
+	}
+	var flagData [1]byte
+	_, flagErr := io.ReadFull(reader, flagData[:])
+	if flagErr != nil {
+		return nil, flagErr
+	}
+	_, _ = nameData, name
+	switch typeData[0] {
+	case typeBoolean:
+		return BooleanFromReader(name, idData, seqData, flagData[0], reader)
+	case typeDouble:
+		return DoubleFromReader(name, idData, seqData, flagData[0], reader)
+	case typeString:
+		return StringFromReader(name, idData, seqData, flagData[0], reader)
+	case typeRaw:
+		return RawFromReader(name, idData, seqData, flagData[0], reader)
+	case typeBooleanArr:
+		return BooleanArrFromReader(name, idData, seqData, flagData[0], reader)
+	case typeDoubleArr:
+		return DoubleArrFromReader(name, idData, seqData, flagData[0], reader)
+	case typeStringArr:
+		return StringArrFromReader(name, idData, seqData, flagData[0], reader)
+	default:
+		return nil, errors.New("entry: Unknown entry type")
+	}
+}
+
+// BuildFromBytes creates an entry using the data passed in.
 func BuildFromBytes(data []byte) (Adapter, error) {
 	nameLen, sizeLen := util.ReadULeb128(bytes.NewReader(data))
 	dName := string(data[sizeLen : nameLen-1])
@@ -70,14 +120,16 @@ func BuildFromBytes(data []byte) (Adapter, error) {
 	}
 }
 
-func (base *Base) clone() *Base {
-	return &*base
+func (base *Base) clone() Base {
+	return *base
 }
 
 // CompressToBytes remakes the original byte slice to represent this entry
 func (base *Base) compressToBytes() []byte {
-	output := []byte{}
+	var output []byte
 	nameBytes := []byte(base.eName)
+	nameLen := util.EncodeULeb128(uint32(len(nameBytes)))
+	output = append(output, nameLen...)
 	output = append(output, nameBytes...)
 	output = append(output, base.eType)
 	output = append(output, base.eID[:]...)

@@ -5,6 +5,17 @@ type KeepAlive struct {
 	Base
 }
 
+// KeepAliveFromReader builds a new KeepAlive message
+func KeepAliveFromReader() *KeepAlive {
+	return &KeepAlive{
+		Base: Base{
+			mType: typeKeepAlive,
+			// KeepAlive has no body data
+			mData: []byte{},
+		},
+	}
+}
+
 // KeepAliveFromItems builds a new KeepAlive message
 func KeepAliveFromItems() *KeepAlive {
 	return &KeepAlive{

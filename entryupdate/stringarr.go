@@ -1,4 +1,4 @@
-package entry
+package entryupdate
 
 import (
 	"bytes"
@@ -15,7 +15,7 @@ type StringArr struct {
 }
 
 // StringArrFromReader builds a StringArr entry using the provided parameters
-func StringArrFromReader(name string, id [2]byte, sequence [2]byte, persist byte, reader io.Reader) (*StringArr, error) {
+func StringArrFromReader(id [2]byte, sequence [2]byte, etype byte, reader io.Reader) (*StringArr, error) {
 	var value []byte
 	var tempValSize [1]byte
 	_, sizeErr := io.ReadFull(reader, tempValSize[:])
@@ -36,23 +36,19 @@ func StringArrFromReader(name string, id [2]byte, sequence [2]byte, persist byte
 		value = append(value, strData[:]...)
 		val = append(val, string(strData[:]))
 	}
-	persistant := (persist == flagPersist)
 	return &StringArr{
-		trueValue:    val,
-		isPersistant: persistant,
+		trueValue: val,
 		Base: Base{
-			eName:  name,
-			eType:  typeStringArr,
-			eID:    id,
-			eSeq:   sequence,
-			eFlag:  persist,
-			eValue: value,
+			ID:    id,
+			Seq:   sequence,
+			Type:  typeStringArr,
+			Value: value,
 		},
 	}, nil
 }
 
 // StringArrFromItems builds a StringArr entry using the provided parameters
-func StringArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *StringArr {
+func StringArrFromItems(id [2]byte, sequence [2]byte, etype byte, value []byte) *StringArr {
 	valSize := int(value[0])
 	var val []string
 	var previousPos uint32 = 1
@@ -64,17 +60,13 @@ func StringArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte,
 		val = append(val, tempVal)
 		previousPos = strPos - 1
 	}
-	persistant := (persist == flagPersist)
 	return &StringArr{
-		trueValue:    val,
-		isPersistant: persistant,
+		trueValue: val,
 		Base: Base{
-			eName:  name,
-			eType:  typeStringArr,
-			eID:    id,
-			eSeq:   sequence,
-			eFlag:  persist,
-			eValue: value,
+			ID:    id,
+			Seq:   sequence,
+			Type:  typeStringArr,
+			Value: value,
 		},
 	}
 }
@@ -87,11 +79,6 @@ func (stringArr *StringArr) GetValue() interface{} {
 // GetValueAtIndex returns the value at the specified index
 func (stringArr *StringArr) GetValueAtIndex(index int) string {
 	return stringArr.trueValue[index]
-}
-
-// IsPersistant returns whether or not the entry should persist beyond restarts.
-func (stringArr *StringArr) IsPersistant() bool {
-	return stringArr.isPersistant
 }
 
 // Clone returns an identical entry

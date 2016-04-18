@@ -5,6 +5,17 @@ type ClientHelloComplete struct {
 	Base
 }
 
+// ClientHelloCompleteFromReader builds a new ClientHelloComplete message
+func ClientHelloCompleteFromReader() *ClientHelloComplete {
+	return &ClientHelloComplete{
+		Base: Base{
+			mType: typeClientHelloComplete,
+			// ClientHelloComplete has no body data
+			mData: []byte{},
+		},
+	}
+}
+
 // ClientHelloCompleteFromItems builds a new ClientHelloComplete message
 func ClientHelloCompleteFromItems() *ClientHelloComplete {
 	return &ClientHelloComplete{

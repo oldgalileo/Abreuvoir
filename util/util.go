@@ -35,20 +35,41 @@ func EncodeULeb128(value uint32) []byte {
 }
 
 // ReadULeb128 reads and decodes an unsigned LEB128 value from a ByteReader to an unsigned int32 value. Returns the result as a uint32
-func ReadULeb128(reader io.ByteReader) (uint32, uint32) {
+func ReadULeb128(reader io.Reader) (uint32, uint32) {
 	var result uint32
 	var ctr uint32
-	var cur byte = 0x80
+	var cur = [1]byte{0x80}
 	var err error
-	for (cur&0x80 == 0x80) && ctr < 5 {
-		cur, err = reader.ReadByte()
+	for (cur[0]&0x80 == 0x80) && ctr < 5 {
+		_, err = io.ReadFull(reader, cur[:])
 		if err != nil {
 			panic(err)
 		}
-		result += uint32((cur & 0x7f)) << (ctr * 7)
+		result += uint32((cur[0] & 0x7f)) << (ctr * 7)
 		ctr++
 	}
 	return result, ctr
+}
+
+// PeekULeb128 reads and decodes an unsigned LEB128 value from a ByteReader to an unsigned int32 value. Returns the result as a uint32,
+// along with the data read. This is more resource intensive than ReadULeb128, and it is advised that whenever possible you should use
+// ReadULeb128 instead.
+func PeekULeb128(reader io.Reader) (uint32, []byte) {
+	var peeked []byte
+	var result uint32
+	var ctr uint32
+	var cur = [1]byte{0x80}
+	var err error
+	for (cur[0]&0x80 == 0x80) && ctr < 5 {
+		_, err = io.ReadFull(reader, cur[:])
+		if err != nil {
+			panic(err)
+		}
+		peeked = append(peeked, cur[0])
+		result += uint32((cur[0] & 0x7f)) << (ctr * 7)
+		ctr++
+	}
+	return result, peeked
 }
 
 // BytesToFloat64 converts bytes to Float64

@@ -1,10 +1,22 @@
 package entry
 
+import "io"
+
 // Boolean Entry
 type Boolean struct {
 	Base
 	trueValue    bool
 	isPersistant bool
+}
+
+// BooleanFromReader builds a boolean entry using the provided parameters
+func BooleanFromReader(name string, id [2]byte, sequence [2]byte, persist byte, reader io.Reader) (*Boolean, error) {
+	var value [1]byte
+	_, err := io.ReadFull(reader, value[:])
+	if err != nil {
+		return nil, err
+	}
+	return BooleanFromItems(name, id, sequence, persist, value[:]), nil
 }
 
 // BooleanFromItems builds a boolean entry using the provided parameters
@@ -40,7 +52,7 @@ func (boolean *Boolean) Clone() *Boolean {
 	return &Boolean{
 		trueValue:    boolean.trueValue,
 		isPersistant: boolean.isPersistant,
-		Base:         *boolean.Base.clone(),
+		Base:         boolean.Base.clone(),
 	}
 }
 

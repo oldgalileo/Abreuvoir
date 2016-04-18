@@ -9,6 +9,8 @@ var (
 )
 
 // SetAddress sets the address of the remote server
+// It's advised to use a local host name instead of
+// an IP for better
 func SetAddress(newAddress string) {
 	address = newAddress
 }
@@ -19,6 +21,11 @@ func SetPort(newPort string) {
 }
 
 // InitClient initializes the client and the connection to the remote server.
-func InitClient() {
-	client = *newClient(address, port)
+func InitClient() error {
+	var tempClient, err = newClient(address, port)
+	if err != nil {
+		return err
+	}
+	client = *tempClient
+	return nil
 }

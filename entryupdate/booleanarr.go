@@ -1,16 +1,15 @@
-package entry
+package entryupdate
 
 import "io"
 
 // BooleanArr Entry
 type BooleanArr struct {
 	Base
-	trueValue    []bool
-	isPersistant bool
+	trueValue []bool
 }
 
 // BooleanArrFromReader builds a BooleanArr entry using the provided parameters
-func BooleanArrFromReader(name string, id [2]byte, sequence [2]byte, persist byte, reader io.Reader) (*BooleanArr, error) {
+func BooleanArrFromReader(id [2]byte, sequence [2]byte, etype byte, reader io.Reader) (*BooleanArr, error) {
 	var tempValSize [1]byte
 	_, sizeErr := io.ReadFull(reader, tempValSize[:])
 	if sizeErr != nil {
@@ -22,28 +21,24 @@ func BooleanArrFromReader(name string, id [2]byte, sequence [2]byte, persist byt
 	if valErr != nil {
 		return nil, valErr
 	}
-	return BooleanArrFromItems(name, id, sequence, persist, value), nil
+	return BooleanArrFromItems(id, sequence, etype, value), nil
 }
 
 // BooleanArrFromItems builds a BooleanArr entry using the provided parameters
-func BooleanArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *BooleanArr {
+func BooleanArrFromItems(id [2]byte, sequence [2]byte, etype byte, value []byte) *BooleanArr {
 	valSize := int(value[0])
 	var val []bool
 	for counter := 1; counter-1 < valSize; counter++ {
 		tempVal := (value[counter] == boolTrue)
 		val = append(val, tempVal)
 	}
-	persistant := (persist == flagPersist)
 	return &BooleanArr{
-		trueValue:    val,
-		isPersistant: persistant,
+		trueValue: val,
 		Base: Base{
-			eName:  name,
-			eType:  typeBooleanArr,
-			eID:    id,
-			eSeq:   sequence,
-			eFlag:  persist,
-			eValue: value,
+			ID:    id,
+			Seq:   sequence,
+			Type:  typeBooleanArr,
+			Value: value,
 		},
 	}
 }
@@ -58,17 +53,11 @@ func (booleanArr *BooleanArr) GetValueAtIndex(index int) bool {
 	return booleanArr.trueValue[index]
 }
 
-// IsPersistant returns whether or not the entry should persist beyond restarts.
-func (booleanArr *BooleanArr) IsPersistant() bool {
-	return booleanArr.isPersistant
-}
-
 // Clone returns an identical entry
 func (booleanArr *BooleanArr) Clone() *BooleanArr {
 	return &BooleanArr{
-		trueValue:    booleanArr.trueValue,
-		isPersistant: booleanArr.isPersistant,
-		Base:         booleanArr.Base.clone(),
+		trueValue: booleanArr.trueValue,
+		Base:      booleanArr.Base.clone(),
 	}
 }
 

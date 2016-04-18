@@ -2,6 +2,7 @@ package message
 
 import (
 	"bytes"
+	"io"
 
 	"github.com/HowardStark/abreuvoir/util"
 )
@@ -13,12 +14,40 @@ type ClientHello struct {
 	identity string
 }
 
+// ClientHelloFromReader builds a new ClientHello message using the provided io.Reader
+func ClientHelloFromReader(reader io.Reader) (Adapter, error) {
+	var protocolRev [2]byte
+	_, err := io.ReadFull(reader, protocolRev[:])
+	if err != nil {
+		return nil, err
+	}
+	nameLen, sizeData := util.PeekULeb128(reader)
+	nameData := make([]byte, nameLen)
+	_, err = io.ReadFull(reader, nameData[:])
+	if err != nil {
+		return nil, err
+	}
+	name := string(nameData[:])
+	var totalData []byte
+	totalData = append(totalData, protocolRev[:]...)
+	totalData = append(totalData, sizeData...)
+	totalData = append(totalData, nameData[:]...)
+	return &ClientHello{
+		identity: name,
+		protoRev: protocolRev,
+		Base: Base{
+			mType: typeClientHello,
+			mData: totalData,
+		},
+	}, nil
+}
+
 // ClientHelloFromItems builds a new ClientHello message using the provided parameters
 func ClientHelloFromItems(protocolRev [2]byte, nameData []byte) *ClientHello {
 	nameLen, sizeLen := util.ReadULeb128(bytes.NewBuffer(nameData))
 	name := string(nameData[sizeLen:nameLen])
-	totalData := []byte{}
-	totalData = append(totalData, protocolRev[:2]...)
+	var totalData []byte
+	totalData = append(totalData, protocolRev[:]...)
 	totalData = append(totalData, nameData[:]...)
 	return &ClientHello{
 		identity: name,

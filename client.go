@@ -2,7 +2,9 @@ package abreuvoir
 
 import (
 	"errors"
+	"io"
 	"net"
+	"time"
 
 	"github.com/HowardStark/abreuvoir/entry"
 	"github.com/HowardStark/abreuvoir/message"
@@ -26,11 +28,16 @@ const (
 	// ClientInSync indicates that the client is completely in sync
 	// with the server and has all the correct values.
 	ClientInSync
+	// keepAliveTime is the amount of time (seconds) between packets
+	// that the client waits before it sends a KeepAlive message.
+	// It is advised to never have this lower than one second so as to
+	// prevent overloading the server.
+	keepAliveTime int64 = 1
 )
 
 var (
 	lastPacket message.Adapter
-	lastSent   int
+	lastSent   int64
 )
 
 // Client is the NetworkTables Client
@@ -43,13 +50,19 @@ type Client struct {
 func newClient(connAddr, connPort string) (*Client, error) {
 	tcpConn, err := net.Dial("tcp", util.ConcatAddress(connAddr, connPort))
 	if err != nil {
-		return nil, err
+		return &Client{
+			conn:    nil,
+			entries: map[string]entry.Adapter{},
+			status:  ClientDisconnected,
+		}, err
 	}
-
-	return &Client{
+	client := Client{
 		conn:    tcpConn,
 		entries: map[string]entry.Adapter{},
+		status:  ClientConnected,
 	}
+	defer client.startHandshake()
+	return &client, nil
 }
 
 // GetBoolean fetches a boolean at the specified key
@@ -60,20 +73,52 @@ func (client *Client) GetBoolean(key string) bool {
 }
 
 func (client *Client) startHandshake() {
-
+	go client.keepAlive(message.KeepAliveFromItems())
 }
 
-//
+// sendMessage
 func (client *Client) sendMessage(message message.Adapter) error {
 	if client.status != ClientDisconnected {
 		client.conn.Write(message.CompressToBytes())
+		defer updateLastSent()
+		return nil
 	}
-	return errors.New("client: server could not be reached.")
+	return errors.New("client: server could not be reached")
+}
+
+// readMessage
+func (client *Client) receiveIncoming() {
+	var potentialMessage [1]byte
+	for client.status != ClientDisconnected {
+		_, ioError := io.ReadFull(client.conn, potentialMessage[:])
+		if ioError != nil {
+			if ioError == io.EOF {
+				continue
+			}
+			panic(ioError)
+		}
+		tempPacket, messageError := message.BuildFromReader(potentialMessage, client.conn)
+		if messageError != nil {
+			panic(messageError)
+		}
+		lastPacket = tempPacket
+	}
+}
+
+func updateLastSent() {
+	currentTime := time.Now()
+	lastSent = currentTime.Unix()
 }
 
 // keepAlive should be run in a Go routine. It sends a
-// the provided packet after the provided time (ms) have
+// the provided packet after the provided time (seconds) have
 // passed between the last packet.
-func (client *Client) keepAlive(packet message.Adapter, timeout int) {
-
+func (client *Client) keepAlive(packet message.Adapter) {
+	for client.status != ClientDisconnected {
+		currentTime := time.Now()
+		currentSeconds := currentTime.Unix()
+		if (currentSeconds - lastSent) >= keepAliveTime {
+			go client.sendMessage(packet)
+		}
+	}
 }

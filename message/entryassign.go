@@ -1,11 +1,30 @@
 package message
 
-import "github.com/HowardStark/abreuvoir/entry"
+import (
+	"io"
+
+	"github.com/HowardStark/abreuvoir/entry"
+)
 
 // EntryAssign message
 type EntryAssign struct {
 	Base
 	entry entry.Adapter
+}
+
+// EntryAssignFromReader builds an EntryAssign message and its entry from a reader
+func EntryAssignFromReader(reader io.Reader) (*EntryAssign, error) {
+	tempEntry, err := entry.BuildFromReader(reader)
+	if err != nil {
+		return nil, err
+	}
+	return &EntryAssign{
+		entry: tempEntry,
+		Base: Base{
+			mType: typeEntryAssign,
+			mData: tempEntry.CompressToBytes(),
+		},
+	}, nil
 }
 
 // EntryAssignFromEntry builds an EntryAssign message from an entry

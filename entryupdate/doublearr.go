@@ -1,4 +1,4 @@
-package entry
+package entryupdate
 
 import (
 	"io"
@@ -9,12 +9,11 @@ import (
 // DoubleArr Entry
 type DoubleArr struct {
 	Base
-	trueValue    []float64
-	isPersistant bool
+	trueValue []float64
 }
 
 // DoubleArrFromReader builds a DoubleArr entry using the provided parameters
-func DoubleArrFromReader(name string, id [2]byte, sequence [2]byte, persist byte, reader io.Reader) (*DoubleArr, error) {
+func DoubleArrFromReader(id [2]byte, sequence [2]byte, etype byte, reader io.Reader) (*DoubleArr, error) {
 	var tempValSize [1]byte
 	_, sizeErr := io.ReadFull(reader, tempValSize[:])
 	if sizeErr != nil {
@@ -26,28 +25,24 @@ func DoubleArrFromReader(name string, id [2]byte, sequence [2]byte, persist byte
 	if valErr != nil {
 		return nil, valErr
 	}
-	return DoubleArrFromItems(name, id, sequence, persist, value), nil
+	return DoubleArrFromItems(id, sequence, etype, value), nil
 }
 
 // DoubleArrFromItems builds a DoubleArr entry using the provided parameters
-func DoubleArrFromItems(name string, id [2]byte, sequence [2]byte, persist byte, value []byte) *DoubleArr {
+func DoubleArrFromItems(id [2]byte, sequence [2]byte, etype byte, value []byte) *DoubleArr {
 	valSize := int(value[0])
 	var val []float64
 	for counter := 1; (counter-1)/8 < valSize; counter += 8 {
 		tempVal := util.BytesToFloat64(value[counter : counter+8])
 		val = append(val, tempVal)
 	}
-	persistant := (persist == flagPersist)
 	return &DoubleArr{
-		trueValue:    val,
-		isPersistant: persistant,
+		trueValue: val,
 		Base: Base{
-			eName:  name,
-			eType:  typeDoubleArr,
-			eID:    id,
-			eSeq:   sequence,
-			eFlag:  persist,
-			eValue: value,
+			ID:    id,
+			Seq:   sequence,
+			Type:  typeDoubleArr,
+			Value: value,
 		},
 	}
 }
@@ -62,17 +57,11 @@ func (doubleArr *DoubleArr) GetValueAtIndex(index int) float64 {
 	return doubleArr.trueValue[index]
 }
 
-// IsPersistant returns whether or not the entry should persist beyond restarts.
-func (doubleArr *DoubleArr) IsPersistant() bool {
-	return doubleArr.isPersistant
-}
-
 // Clone returns an identical entry
 func (doubleArr *DoubleArr) Clone() *DoubleArr {
 	return &DoubleArr{
-		trueValue:    doubleArr.trueValue,
-		isPersistant: doubleArr.isPersistant,
-		Base:         doubleArr.Base.clone(),
+		trueValue: doubleArr.trueValue,
+		Base:      doubleArr.Base.clone(),
 	}
 }
 

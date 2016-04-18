@@ -1,11 +1,30 @@
 package message
 
-import "github.com/HowardStark/abreuvoir/entry"
+import (
+	"io"
+
+	"github.com/HowardStark/abreuvoir/entry"
+)
 
 // EntryFlagUpdate message
 type EntryFlagUpdate struct {
 	Base
 	update entry.FlagUpdate
+}
+
+// EntryFlagUpdateFromReader blehhh stomach hurts toooooo
+func EntryFlagUpdateFromReader(reader io.Reader) (*EntryFlagUpdate, error) {
+	tempFlag, err := entry.FlagUpdateFromReader(reader)
+	if err != nil {
+		return nil, err
+	}
+	return &EntryFlagUpdate{
+		update: *tempFlag,
+		Base: Base{
+			mType: typeEntryFlagUpdate,
+			mData: tempFlag.CompressToBytes(),
+		},
+	}, nil
 }
 
 // EntryFlagUpdateFromFlagUpdate builds an EntryFlagUpdate message from a FlagUpdate
