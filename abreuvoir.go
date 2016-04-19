@@ -2,7 +2,7 @@ package abreuvoir
 
 var (
 	address, port string = "0.0.0.0", "1735"
-	client        Client
+	client        *Client
 
 	// VERSION is the current NetworkTables protocol revision
 	VERSION = [2]byte{0x03, 0x00}
@@ -28,6 +28,6 @@ func InitClient() error {
 	if err != nil {
 		return err
 	}
-	client = *tempClient
+	client = tempClient
 	return nil
 }

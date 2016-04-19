@@ -76,8 +76,8 @@ func newClient(connAddr, connPort string) (*Client, error) {
 
 func (client *Client) connect() {
 	go client.sendOutgoing()
-	go client.startHandshake()
 	go client.receiveIncoming()
+	go client.startHandshake()
 }
 
 func (client *Client) startHandshake() {
