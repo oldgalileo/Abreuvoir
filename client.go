@@ -134,11 +134,11 @@ func (client *Client) receiveIncoming() {
 			if ioError == io.EOF {
 				continue
 			}
-			panic(ioError)
+			client.Close()
 		}
 		tempPacket, messageError := message.BuildFromReader(potentialMessage, client.conn)
 		if messageError != nil {
-			panic(messageError)
+			client.Close()
 		}
 		lastPacket = tempPacket
 	}
