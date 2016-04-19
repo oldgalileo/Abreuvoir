@@ -9,7 +9,7 @@ type ClientHelloComplete struct {
 func ClientHelloCompleteFromReader() *ClientHelloComplete {
 	return &ClientHelloComplete{
 		Base: Base{
-			mType: typeClientHelloComplete,
+			mType: TypeClientHelloComplete,
 			// ClientHelloComplete has no body data
 			mData: []byte{},
 		},
@@ -20,7 +20,7 @@ func ClientHelloCompleteFromReader() *ClientHelloComplete {
 func ClientHelloCompleteFromItems() *ClientHelloComplete {
 	return &ClientHelloComplete{
 		Base: Base{
-			mType: typeClientHelloComplete,
+			mType: TypeClientHelloComplete,
 			// ClientHelloComplete has no body data
 			mData: []byte{},
 		},
@@ -30,4 +30,9 @@ func ClientHelloCompleteFromItems() *ClientHelloComplete {
 // CompressToBytes returns the message in its byte array form
 func (clientHelloComplete *ClientHelloComplete) CompressToBytes() []byte {
 	return clientHelloComplete.Base.compressToBytes()
+}
+
+// GetType returns the message's type
+func (clientHelloComplete *ClientHelloComplete) GetType() byte {
+	return TypeClientHelloComplete
 }

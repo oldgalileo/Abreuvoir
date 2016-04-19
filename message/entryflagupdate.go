@@ -21,7 +21,7 @@ func EntryFlagUpdateFromReader(reader io.Reader) (*EntryFlagUpdate, error) {
 	return &EntryFlagUpdate{
 		update: *tempFlag,
 		Base: Base{
-			mType: typeEntryFlagUpdate,
+			mType: TypeEntryFlagUpdate,
 			mData: tempFlag.CompressToBytes(),
 		},
 	}, nil
@@ -32,7 +32,7 @@ func EntryFlagUpdateFromFlagUpdate(flagUpdateData entry.FlagUpdate) *EntryFlagUp
 	return &EntryFlagUpdate{
 		update: flagUpdateData,
 		Base: Base{
-			mType: typeEntryFlagUpdate,
+			mType: TypeEntryFlagUpdate,
 			mData: flagUpdateData.CompressToBytes(),
 		},
 	}
@@ -44,7 +44,7 @@ func EntryFlagUpdateFromItems(entryID [2]byte, entryFlag byte) *EntryFlagUpdate 
 	return &EntryFlagUpdate{
 		update: tempFlagUpdate,
 		Base: Base{
-			mType: typeEntryFlagUpdate,
+			mType: TypeEntryFlagUpdate,
 			mData: tempFlagUpdate.CompressToBytes(),
 		},
 	}
@@ -58,4 +58,9 @@ func (entryFlagUpdate *EntryFlagUpdate) GetFlagUpdate() entry.FlagUpdate {
 // CompressToBytes returns the message in its byte array form
 func (entryFlagUpdate *EntryFlagUpdate) CompressToBytes() []byte {
 	return entryFlagUpdate.Base.compressToBytes()
+}
+
+// GetType returns the message's type
+func (entryFlagUpdate *EntryFlagUpdate) GetType() byte {
+	return TypeEntryFlagUpdate
 }

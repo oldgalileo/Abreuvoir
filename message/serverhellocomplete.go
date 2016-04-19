@@ -9,7 +9,7 @@ type ServerHelloComplete struct {
 func ServerHelloCompleteFromReader() *ServerHelloComplete {
 	return &ServerHelloComplete{
 		Base: Base{
-			mType: typeServerHelloComplete,
+			mType: TypeServerHelloComplete,
 			// ServerHelloComplete has no body data
 			mData: []byte{},
 		},
@@ -20,7 +20,7 @@ func ServerHelloCompleteFromReader() *ServerHelloComplete {
 func ServerHelloCompleteFromItems() *ServerHelloComplete {
 	return &ServerHelloComplete{
 		Base: Base{
-			mType: typeServerHelloComplete,
+			mType: TypeServerHelloComplete,
 			// ServerHelloComplete has no body data
 			mData: []byte{},
 		},
@@ -30,4 +30,9 @@ func ServerHelloCompleteFromItems() *ServerHelloComplete {
 // CompressToBytes returns the message in its byte array form
 func (serverHelloComplete *ServerHelloComplete) CompressToBytes() []byte {
 	return serverHelloComplete.Base.compressToBytes()
+}
+
+// GetType returns the message's type
+func (serverHelloComplete *ServerHelloComplete) GetType() byte {
+	return TypeServerHelloComplete
 }

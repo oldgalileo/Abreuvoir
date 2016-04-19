@@ -37,7 +37,7 @@ func ServerHelloFromReader(reader io.Reader) (*ServerHello, error) {
 		firstConnection: firstConn,
 		serverIdentity:  identity,
 		Base: Base{
-			mType: typeServerHello,
+			mType: TypeServerHello,
 			mData: totalData,
 		},
 	}, nil
@@ -53,7 +53,7 @@ func ServerHelloFromItems(flags byte, identity []byte) *ServerHello {
 		firstConnection: firstConn,
 		serverIdentity:  identityStr,
 		Base: Base{
-			mType: typeServerHello,
+			mType: TypeServerHello,
 			mData: totalData,
 		},
 	}
@@ -72,4 +72,9 @@ func (serverHello *ServerHello) GetServerIdentity() string {
 // CompressToBytes returns the message in its byte array form
 func (serverHello *ServerHello) CompressToBytes() []byte {
 	return serverHello.Base.compressToBytes()
+}
+
+// GetType returns the message's type
+func (serverHello *ServerHello) GetType() byte {
+	return TypeServerHello
 }

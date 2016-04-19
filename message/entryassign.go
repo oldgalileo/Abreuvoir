@@ -21,7 +21,7 @@ func EntryAssignFromReader(reader io.Reader) (*EntryAssign, error) {
 	return &EntryAssign{
 		entry: tempEntry,
 		Base: Base{
-			mType: typeEntryAssign,
+			mType: TypeEntryAssign,
 			mData: tempEntry.CompressToBytes(),
 		},
 	}, nil
@@ -32,7 +32,7 @@ func EntryAssignFromEntry(newEntry entry.Adapter) *EntryAssign {
 	return &EntryAssign{
 		entry: newEntry,
 		Base: Base{
-			mType: typeEntryAssign,
+			mType: TypeEntryAssign,
 			mData: newEntry.CompressToBytes(),
 		},
 	}
@@ -47,7 +47,7 @@ func EntryAssignFromBytes(data []byte) (*EntryAssign, error) {
 	return &EntryAssign{
 		entry: tempEntry,
 		Base: Base{
-			mType: typeEntryAssign,
+			mType: TypeEntryAssign,
 			mData: data,
 		},
 	}, nil
@@ -61,4 +61,9 @@ func (entryAssign *EntryAssign) GetEntry() entry.Adapter {
 // CompressToBytes returns the message in its byte array form
 func (entryAssign *EntryAssign) CompressToBytes() []byte {
 	return entryAssign.Base.compressToBytes()
+}
+
+// GetType returns the message's type
+func (entryAssign *EntryAssign) GetType() byte {
+	return TypeEntryAssign
 }

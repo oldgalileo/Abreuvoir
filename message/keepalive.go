@@ -9,7 +9,7 @@ type KeepAlive struct {
 func KeepAliveFromReader() *KeepAlive {
 	return &KeepAlive{
 		Base: Base{
-			mType: typeKeepAlive,
+			mType: TypeKeepAlive,
 			// KeepAlive has no body data
 			mData: []byte{},
 		},
@@ -20,7 +20,7 @@ func KeepAliveFromReader() *KeepAlive {
 func KeepAliveFromItems() *KeepAlive {
 	return &KeepAlive{
 		Base: Base{
-			mType: typeKeepAlive,
+			mType: TypeKeepAlive,
 			// KeepAlive has no body data
 			mData: []byte{},
 		},
@@ -30,4 +30,9 @@ func KeepAliveFromItems() *KeepAlive {
 // CompressToBytes returns the message in its byte array form
 func (keepAlive *KeepAlive) CompressToBytes() []byte {
 	return keepAlive.Base.compressToBytes()
+}
+
+// GetType returns the message's type
+func (keepAlive *KeepAlive) GetType() byte {
+	return TypeKeepAlive
 }

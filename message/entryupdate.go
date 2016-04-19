@@ -21,7 +21,7 @@ func EntryUpdateFromReader(reader io.Reader) (*EntryUpdate, error) {
 	return &EntryUpdate{
 		Update: tempUpdate,
 		Base: Base{
-			mType: typeEntryUpdate,
+			mType: TypeEntryUpdate,
 			mData: tempUpdate.CompressToBytes(),
 		},
 	}, nil
@@ -32,7 +32,7 @@ func EntryUpdateFromUpdate(entryUpdate entryupdate.Adapter) *EntryUpdate {
 	return &EntryUpdate{
 		Update: entryUpdate,
 		Base: Base{
-			mType: typeEntryUpdate,
+			mType: TypeEntryUpdate,
 			mData: entryUpdate.CompressToBytes(),
 		},
 	}
@@ -46,4 +46,9 @@ func (entryUpdate *EntryUpdate) GetUpdate() entryupdate.Adapter {
 // CompressToBytes returns the message in its byte array form
 func (entryUpdate *EntryUpdate) CompressToBytes() []byte {
 	return entryUpdate.Base.compressToBytes()
+}
+
+// GetType returns the message's type
+func (entryUpdate *EntryUpdate) GetType() byte {
+	return TypeEntryUpdate
 }

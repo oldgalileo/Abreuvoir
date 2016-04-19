@@ -25,6 +25,10 @@ const (
 	// ClientSentHello indicates that the client has sent the hello
 	// packets and is waiting for a response from the server
 	ClientSentHello
+	// ClientStartingSync indicates that the client has received the
+	// server hello and is beginning to synchronize values with the
+	// server.
+	ClientStartingSync
 	// ClientInSync indicates that the client is completely in sync
 	// with the server and has all the correct values.
 	ClientInSync
@@ -42,6 +46,7 @@ var (
 
 // Client is the NetworkTables Client
 type Client struct {
+	handler ClientHandler
 	conn    net.Conn
 	entries map[string]entry.Adapter
 	status  ClientStatus
@@ -51,18 +56,32 @@ func newClient(connAddr, connPort string) (*Client, error) {
 	tcpConn, err := net.Dial("tcp", util.ConcatAddress(connAddr, connPort))
 	if err != nil {
 		return &Client{
+			handler: nil,
 			conn:    nil,
 			entries: map[string]entry.Adapter{},
 			status:  ClientDisconnected,
 		}, err
 	}
 	client := Client{
+		handler: ClientHandler{
+			client,
+		},
 		conn:    tcpConn,
 		entries: map[string]entry.Adapter{},
 		status:  ClientConnected,
 	}
 	defer client.startHandshake()
 	return &client, nil
+}
+
+// Close disconnects and closes the client from the server.
+func (client *Client) Close() error {
+	if client.status == ClientDisconnected {
+		return errors.New("client: Already disconnected")
+	}
+	client.status = ClientDisconnected
+	client.conn.Close()
+	return nil
 }
 
 // GetBoolean fetches a boolean at the specified key

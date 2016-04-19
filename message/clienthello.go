@@ -36,7 +36,7 @@ func ClientHelloFromReader(reader io.Reader) (Adapter, error) {
 		identity: name,
 		protoRev: protocolRev,
 		Base: Base{
-			mType: typeClientHello,
+			mType: TypeClientHello,
 			mData: totalData,
 		},
 	}, nil
@@ -53,7 +53,7 @@ func ClientHelloFromItems(protocolRev [2]byte, nameData []byte) *ClientHello {
 		identity: name,
 		protoRev: protocolRev,
 		Base: Base{
-			mType: typeClientHello,
+			mType: TypeClientHello,
 			mData: totalData,
 		},
 	}
@@ -72,4 +72,9 @@ func (clientHello *ClientHello) GetIdentity() string {
 // CompressToBytes returns the message in its byte array form
 func (clientHello *ClientHello) CompressToBytes() []byte {
 	return clientHello.Base.compressToBytes()
+}
+
+// GetType returns the message's type
+func (clientHello *ClientHello) GetType() byte {
+	return TypeClientHello
 }

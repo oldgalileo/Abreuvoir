@@ -18,7 +18,7 @@ func EntryDeleteFromReader(reader io.Reader) (*EntryDelete, error) {
 	return &EntryDelete{
 		id: dID,
 		Base: Base{
-			mType: typeEntryDelete,
+			mType: TypeEntryDelete,
 			mData: dID[:],
 		},
 	}, nil
@@ -29,7 +29,7 @@ func EntryDeleteFromItems(dID [2]byte) *EntryDelete {
 	return &EntryDelete{
 		id: dID,
 		Base: Base{
-			mType: typeEntryDelete,
+			mType: TypeEntryDelete,
 			mData: dID[:],
 		},
 	}
@@ -43,4 +43,9 @@ func (entryDelete *EntryDelete) GetID() [2]byte {
 // CompressToBytes returns the message in its byte array form
 func (entryDelete *EntryDelete) CompressToBytes() []byte {
 	return entryDelete.Base.compressToBytes()
+}
+
+// GetType returns the message's type
+func (entryDelete *EntryDelete) GetType() byte {
+	return TypeEntryDelete
 }

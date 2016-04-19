@@ -18,7 +18,7 @@ func ProtoUnsupportedFromReader(reader io.Reader) (*ProtoUnsupported, error) {
 	return &ProtoUnsupported{
 		supportedProto: supportedVersion,
 		Base: Base{
-			mType: typeProtoUnsupported,
+			mType: TypeProtoUnsupported,
 			mData: supportedVersion[:],
 		},
 	}, nil
@@ -29,7 +29,7 @@ func ProtoUnsupportedFromItems(data [2]byte) *ProtoUnsupported {
 	return &ProtoUnsupported{
 		supportedProto: data,
 		Base: Base{
-			mType: typeProtoUnsupported,
+			mType: TypeProtoUnsupported,
 			mData: data[:],
 		},
 	}
@@ -43,4 +43,9 @@ func (protoUnsupported *ProtoUnsupported) GetSupportedProto() [2]byte {
 // CompressToBytes returns the message in its byte array form
 func (protoUnsupported *ProtoUnsupported) CompressToBytes() []byte {
 	return protoUnsupported.Base.compressToBytes()
+}
+
+// GetType returns the message's type
+func (protoUnsupported *ProtoUnsupported) GetType() byte {
+	return TypeProtoUnsupported
 }
