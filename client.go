@@ -46,7 +46,7 @@ var (
 
 // Client is the NetworkTables Client
 type Client struct {
-	handler ClientHandler
+	handler ClientMessageHandler
 	conn    net.Conn
 	entries map[string]entry.Adapter
 	status  ClientStatus
@@ -56,15 +56,14 @@ func newClient(connAddr, connPort string) (*Client, error) {
 	tcpConn, err := net.Dial("tcp", util.ConcatAddress(connAddr, connPort))
 	if err != nil {
 		return &Client{
-			handler: nil,
 			conn:    nil,
 			entries: map[string]entry.Adapter{},
 			status:  ClientDisconnected,
 		}, err
 	}
 	client := Client{
-		handler: ClientHandler{
-			client,
+		handler: ClientMessageHandler{
+			&client,
 		},
 		conn:    tcpConn,
 		entries: map[string]entry.Adapter{},
@@ -72,6 +71,20 @@ func newClient(connAddr, connPort string) (*Client, error) {
 	}
 	defer client.startHandshake()
 	return &client, nil
+}
+
+func (client *Client) connect() {
+	go client.startHandshake()
+	go client.receiveIncoming()
+}
+
+func (client *Client) startHandshake() {
+	clientName := []byte(IDENTITY)
+	clientLength := util.EncodeULeb128(uint32(len(clientName)))
+	clientName = append(clientLength, clientName...)
+	helloMessage := message.ClientHelloFromItems(VERSION, clientName)
+	client.sendMessage(helloMessage)
+	client.status = ClientSentHello
 }
 
 // Close disconnects and closes the client from the server.
@@ -89,10 +102,6 @@ func (client *Client) GetBoolean(key string) bool {
 	key = util.SanitizeKey(key)
 	_ = key
 	return true
-}
-
-func (client *Client) startHandshake() {
-	go client.keepAlive(message.KeepAliveFromItems())
 }
 
 // sendMessage
@@ -133,7 +142,7 @@ func updateLastSent() {
 // the provided packet after the provided time (seconds) have
 // passed between the last packet.
 func (client *Client) keepAlive(packet message.Adapter) {
-	for client.status != ClientDisconnected {
+	for client.status == ClientInSync {
 		currentTime := time.Now()
 		currentSeconds := currentTime.Unix()
 		if (currentSeconds - lastSent) >= keepAliveTime {

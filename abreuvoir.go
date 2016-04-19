@@ -6,6 +6,8 @@ var (
 
 	// VERSION is the current NetworkTables protocol revision
 	VERSION = [2]byte{0x03, 0x00}
+	// IDENTITY is the identity of the client or server
+	IDENTITY = "ABREUVOIR"
 )
 
 // SetAddress sets the address of the remote server
