@@ -40,8 +40,9 @@ const (
 )
 
 var (
-	lastPacket message.Adapter
-	lastSent   int64
+	lastPacket          message.Adapter
+	lastSent            int64
+	messageOutgoingChan = make(chan message.Adapter)
 )
 
 // Client is the NetworkTables Client
@@ -69,11 +70,12 @@ func newClient(connAddr, connPort string) (*Client, error) {
 		entries: map[string]entry.Adapter{},
 		status:  ClientConnected,
 	}
-	defer client.startHandshake()
+	defer client.connect()
 	return &client, nil
 }
 
 func (client *Client) connect() {
+	go client.sendOutgoing()
 	go client.startHandshake()
 	go client.receiveIncoming()
 }
@@ -83,7 +85,7 @@ func (client *Client) startHandshake() {
 	clientLength := util.EncodeULeb128(uint32(len(clientName)))
 	clientName = append(clientLength, clientName...)
 	helloMessage := message.ClientHelloFromItems(VERSION, clientName)
-	client.sendMessage(helloMessage)
+	client.QueueMessage(helloMessage)
 	client.status = ClientSentHello
 }
 
@@ -104,12 +106,21 @@ func (client *Client) GetBoolean(key string) bool {
 	return true
 }
 
-// sendMessage
-func (client *Client) sendMessage(message message.Adapter) error {
+// QueueMessage prepares the message that has been provided for
+// sending.
+func (client *Client) QueueMessage(message message.Adapter) error {
 	if client.status != ClientDisconnected {
-		client.conn.Write(message.CompressToBytes())
-		defer updateLastSent()
+		messageOutgoingChan <- message
 		return nil
+	}
+	return errors.New("client: server could not be reached")
+}
+
+func (client *Client) sendOutgoing() error {
+	for client.status != ClientDisconnected {
+		sending := <-messageOutgoingChan
+		client.conn.Write(sending.CompressToBytes())
+		defer updateLastSent()
 	}
 	return errors.New("client: server could not be reached")
 }
@@ -146,7 +157,7 @@ func (client *Client) keepAlive(packet message.Adapter) {
 		currentTime := time.Now()
 		currentSeconds := currentTime.Unix()
 		if (currentSeconds - lastSent) >= keepAliveTime {
-			go client.sendMessage(packet)
+			go client.QueueMessage(packet)
 		}
 	}
 }
