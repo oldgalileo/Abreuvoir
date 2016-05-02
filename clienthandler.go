@@ -1,6 +1,6 @@
 package abreuvoir
 
-import "github.com/HowardStark/Abreuvoir/message"
+import "github.com/HowardStark/abreuvoir/message"
 
 // ClientMessageHandler handles incoming messages for the client.
 type ClientMessageHandler struct {
